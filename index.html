@@ -7,31 +7,49 @@
   <meta name="description" content="Katsa34 的个人主页：公开项目、网站源码与 GitHub 链接。">
   <meta name="theme-color" content="#151614">
   <meta name="color-scheme" content="dark">
+  <script>
+    // 在首屏绘制前恢复已选主题；浏览器禁用存储时仍可正常使用。
+    (() => {
+      let theme = "dark";
+      try {
+        const saved = localStorage.getItem("katsa34-theme");
+        if (saved === "dark" || saved === "light") theme = saved;
+      } catch {}
+      document.documentElement.dataset.theme = theme;
+      document.querySelector('meta[name="theme-color"]').content =
+        theme === "light" ? "#f4eed8" : "#151614";
+      document.querySelector('meta[name="color-scheme"]').content = theme;
+    })();
+  </script>
   <title>Katsa34 · 个人主页</title>
   <link rel="canonical" href="https://katsa34.github.io/">
   <!--
     使用方法：将本文件替换为仓库根目录的 index.html，无需安装或构建。
     内容：在下方“公开项目”和“关于”区域维护真实信息。
     样式：颜色与间距集中在 :root；新增项目可复用 .project-card。
+    主题：--dark-color 与 --light-color 为同一对主色；浅色模式交换背景与文字。
     字体：全站优先使用本机华文宋体，未安装时回退到系统宋体或衬线字体。
-    所有站外链接均在当前标签页打开；无脚本、外部字体或图片依赖。
+    所有站外链接均在当前标签页打开；无外部脚本、字体或图片依赖。
   -->
   <style>
     /* 01. 设计变量与基础样式 */
     :root {
       color-scheme: dark;
-      --page: #151614;
+      --dark-color: #151614;
+      --light-color: #f4eed8;
+      --page: var(--dark-color);
       --surface: #1f201c;
-      --ink: #f2e6b8;
-      --muted: #d0c69f;
+      --ink: var(--light-color);
+      --muted: #d5cfbc;
       --line: #454638;
       --control-line: #938a64;
-      --accent: #e7d58f;
+      --accent: #ebe3c6;
       --accent-surface: #34362b;
       --accent-hover: #454737;
       --soft: #292b23;
       --art-line: #626247;
-      --focus: #f2de91;
+      --focus: var(--light-color);
+      --shadow: #00000026;
       --font-serif: "STSong", "华文宋体", "Songti SC", "SimSun",
         "Noto Serif CJK SC", "Source Han Serif SC", serif;
       --radius: 1.25rem;
@@ -40,11 +58,28 @@
       font-family: var(--font-serif);
     }
 
+    :root[data-theme="light"] {
+      color-scheme: light;
+      --page: var(--light-color);
+      --ink: var(--dark-color);
+      --surface: #e9e4d1;
+      --muted: #494b43;
+      --line: #c6bfaa;
+      --control-line: #7c7869;
+      --accent: #35372e;
+      --accent-surface: #e1dbc5;
+      --accent-hover: #d4cdb6;
+      --soft: #e6dfc9;
+      --art-line: #b0a88c;
+      --focus: var(--dark-color);
+      --shadow: #15161414;
+    }
+
     *, *::before, *::after { box-sizing: border-box; }
     html { scroll-behavior: smooth; scroll-padding-top: 1.5rem; }
     body {
       margin: 0;
-      background: radial-gradient(ellipse at 85% 0%, #e7d58f0a, transparent 40rem), var(--page);
+      background: var(--page);
       color: var(--ink);
       font-size: 1.0625rem;
       line-height: 1.85;
@@ -53,7 +88,7 @@
     h1, h2, h3, p { margin: 0; }
     h1, h2, h3 { line-height: 1.3; font-weight: 400; }
     a { color: inherit; text-underline-offset: 0.22em; }
-    a:focus-visible, [tabindex="-1"]:focus-visible {
+    a:focus-visible, button:focus-visible, [tabindex="-1"]:focus-visible {
       outline: 3px solid var(--focus);
       outline-offset: 5px;
     }
@@ -127,7 +162,7 @@
       border-radius: 0.65rem;
       text-decoration: none;
       font-weight: 400;
-      transition: background-color 160ms ease, border-color 160ms ease;
+      transition: border-color 160ms ease;
     }
     .button-primary { background: var(--accent-surface); color: var(--ink); }
     .button-primary:hover { background: var(--accent-hover); border-color: var(--accent); }
@@ -145,7 +180,7 @@
       border-radius: 1.5rem;
       background: linear-gradient(145deg, var(--accent-surface), var(--surface));
       color: var(--ink);
-      box-shadow: 0 1.5rem 4rem #00000026;
+      box-shadow: 0 1.5rem 4rem var(--shadow);
     }
     .art-caption, .art-footer { position: relative; z-index: 1; font-size: 0.75rem; letter-spacing: 0.07em; }
     .art-caption { display: flex; justify-content: space-between; gap: 1rem; }
@@ -186,8 +221,35 @@
     .resource-detail { display: block; color: var(--muted); font-size: 0.875rem; overflow-wrap: anywhere; }
     .resource-arrow { flex-shrink: 0; font-size: 1.25rem; }
 
-    /* 05. 页脚、窄屏和减少动态效果 */
-    .site-footer { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.5rem 2rem; padding-block: 1.5rem; border-block-start: 1px solid var(--line); color: var(--muted); font-size: 0.875rem; }
+    /* 05. 右下角主题切换、页脚与窄屏 */
+    .theme-toggle {
+      position: fixed;
+      z-index: 20;
+      right: max(1rem, env(safe-area-inset-right));
+      bottom: max(1rem, env(safe-area-inset-bottom));
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      min-width: 48px;
+      min-height: 48px;
+      padding: 0.65rem 1rem;
+      border: 1px solid var(--control-line);
+      border-radius: 999px;
+      background: var(--surface);
+      color: var(--ink);
+      box-shadow: 0 0.5rem 1.5rem var(--shadow);
+      cursor: pointer;
+      font-size: 0.9375rem;
+      line-height: 1.4;
+      transition: border-color 160ms ease;
+    }
+    .theme-toggle[hidden] { display: none; }
+    .theme-toggle:hover { background: var(--soft); border-color: var(--accent); }
+    .theme-toggle svg { flex-shrink: 0; width: 1.125rem; height: 1.125rem; }
+    .theme-icon-moon, :root[data-theme="light"] .theme-icon-sun { display: none; }
+    :root[data-theme="light"] .theme-icon-moon { display: block; }
+    .site-footer { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.5rem 2rem; padding-block: 1.5rem calc(6rem + env(safe-area-inset-bottom)); border-block-start: 1px solid var(--line); color: var(--muted); font-size: 0.875rem; }
     .site-footer a { display: inline-flex; align-items: center; min-height: 44px; }
     @media (max-width: 48rem) {
       .hero { grid-template-columns: minmax(0, 1fr); }
@@ -210,7 +272,7 @@
     }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
-      .button { transition: none; }
+      .button, .theme-toggle { transition: none; }
     }
   </style>
 </head>
@@ -305,6 +367,47 @@
     <p><span lang="en">Katsa34</span> · 个人主页</p>
     <a href="#top">回到顶部<span class="arrow" aria-hidden="true">↑</span></a>
   </footer>
+
+  <button id="theme-toggle" class="theme-toggle" type="button"
+    aria-label="切换到浅色模式" title="切换到浅色模式" hidden>
+    <svg class="theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" aria-hidden="true" focusable="false">
+      <circle cx="12" cy="12" r="4"></circle>
+      <path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+    </svg>
+    <svg class="theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+      <path d="M20.5 14A8.5 8.5 0 0 1 10 3.5 8.5 8.5 0 1 0 20.5 14Z"></path>
+    </svg>
+    <span class="theme-toggle-label">浅色</span>
+  </button>
+  <script>
+    (() => {
+      const root = document.documentElement;
+      const toggle = document.getElementById("theme-toggle");
+      const label = toggle.querySelector(".theme-toggle-label");
+
+      function applyTheme(theme) {
+        root.dataset.theme = theme;
+        const isLight = theme === "light";
+        const action = isLight ? "切换到深色模式" : "切换到浅色模式";
+        label.textContent = isLight ? "深色" : "浅色";
+        toggle.setAttribute("aria-label", action);
+        toggle.title = action;
+        document.querySelector('meta[name="theme-color"]').content =
+          getComputedStyle(root).getPropertyValue("--page").trim();
+        document.querySelector('meta[name="color-scheme"]').content = theme;
+      }
+
+      applyTheme(root.dataset.theme === "light" ? "light" : "dark");
+      toggle.hidden = false;
+      toggle.addEventListener("click", () => {
+        const theme = root.dataset.theme === "light" ? "dark" : "light";
+        applyTheme(theme);
+        try { localStorage.setItem("katsa34-theme", theme); } catch {}
+      });
+    })();
+  </script>
 </body>
 </html>
 
