@@ -249,6 +249,23 @@
     .theme-toggle svg { flex-shrink: 0; width: 1.125rem; height: 1.125rem; }
     .theme-icon-moon, :root[data-theme="light"] .theme-icon-sun { display: none; }
     :root[data-theme="light"] .theme-icon-moon { display: block; }
+
+    /* 保留完整的新旧画面，从切换按钮向外揭开新主题。 */
+    ::view-transition-image-pair(root) { isolation: auto; }
+    ::view-transition-old(root), ::view-transition-new(root) {
+      animation: none;
+      mix-blend-mode: normal;
+    }
+    ::view-transition-old(root) { z-index: 1; }
+    ::view-transition-new(root) {
+      z-index: 2;
+      animation: theme-reveal 520ms cubic-bezier(0.4, 0, 0.2, 1) both;
+    }
+    @keyframes theme-reveal {
+      from { clip-path: circle(0 at var(--theme-origin-x) var(--theme-origin-y)); }
+      to { clip-path: circle(var(--theme-radius) at var(--theme-origin-x) var(--theme-origin-y)); }
+    }
+
     .site-footer { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.5rem 2rem; padding-block: 1.5rem calc(6rem + env(safe-area-inset-bottom)); border-block-start: 1px solid var(--line); color: var(--muted); font-size: 0.875rem; }
     .site-footer a { display: inline-flex; align-items: center; min-height: 44px; }
     @media (max-width: 48rem) {
@@ -273,6 +290,7 @@
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       .button, .theme-toggle { transition: none; }
+      ::view-transition-old(root), ::view-transition-new(root) { animation: none; }
     }
   </style>
 </head>
@@ -386,6 +404,7 @@
       const root = document.documentElement;
       const toggle = document.getElementById("theme-toggle");
       const label = toggle.querySelector(".theme-toggle-label");
+      let isSwitching = false;
 
       function applyTheme(theme) {
         root.dataset.theme = theme;
@@ -401,10 +420,39 @@
 
       applyTheme(root.dataset.theme === "light" ? "light" : "dark");
       toggle.hidden = false;
-      toggle.addEventListener("click", () => {
+      toggle.addEventListener("click", async () => {
+        if (isSwitching) return;
         const theme = root.dataset.theme === "light" ? "dark" : "light";
-        applyTheme(theme);
-        try { localStorage.setItem("katsa34-theme", theme); } catch {}
+        const update = () => {
+          applyTheme(theme);
+          try { localStorage.setItem("katsa34-theme", theme); } catch {}
+        };
+
+        if (!document.startViewTransition || matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          update();
+          return;
+        }
+
+        const rect = toggle.getBoundingClientRect();
+        const x = rect.left + rect.width / 2;
+        const y = rect.top + rect.height / 2;
+        const radius = Math.ceil(Math.hypot(
+          Math.max(x, innerWidth - x), Math.max(y, innerHeight - y)
+        )) + 1;
+        root.style.setProperty("--theme-origin-x", `${x}px`);
+        root.style.setProperty("--theme-origin-y", `${y}px`);
+        root.style.setProperty("--theme-radius", `${radius}px`);
+
+        isSwitching = true;
+        try {
+          const transition = document.startViewTransition(update);
+          transition.ready.catch(() => {});
+          await transition.finished;
+        } catch {
+          update();
+        } finally {
+          isSwitching = false;
+        }
       });
     })();
   </script>
