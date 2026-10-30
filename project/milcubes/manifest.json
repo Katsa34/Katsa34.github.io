@@ -1,7 +1,7 @@
 {
   "project": "百万立方未来世界",
   "world": "未橙",
-  "url": "https://katsa34.github.io/projects/milcubes/",
+  "url": "https://katsa34.github.io/project/milcubes/",
   "sourceSnapshotDate": "2026-10-29",
   "projectPages": [
     {
@@ -198,13 +198,13 @@
     },
     {
       "path": "index.html",
-      "bytes": 4618552,
-      "sha256": "8894d4e36b4e2f2d6c332cca7d12498d7ad2c0f29464a5450e93c3940487c718"
+      "bytes": 4618551,
+      "sha256": "4d54e20e5659d5c16f8ff0a58fe8c76f417cc4af01cbd33ec906173e5efe1b8d"
     },
     {
       "path": "README.md",
-      "bytes": 731,
-      "sha256": "5d70e182a175fc6bb8ee9f35d3e54e1b2d9a2514edcd13e32f2acf3b0b2d87ac"
+      "bytes": 730,
+      "sha256": "e5815854f63b13efa2a561da65d2d2c24260c64504a6012e22e22d84e2f5930f"
     },
     {
       "path": "site-theme.css",

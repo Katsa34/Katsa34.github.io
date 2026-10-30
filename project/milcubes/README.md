@@ -2,7 +2,7 @@
 
 未橙：一百万立方米，两千个人，一百年的独立生活。
 
-项目地址：https://katsa34.github.io/projects/milcubes/
+项目地址：https://katsa34.github.io/project/milcubes/
 
 `index.html` 是项目展示入口；按标题命名的 HTML 为 11 个项目模块、小组页面、资料目录和两份附件阅读版。`assets/` 保存当前页面使用的原始素材，`attachments/` 保存两份原始 DOCX。来源网址、版本和文件哈希见 `manifest.json`。
 
