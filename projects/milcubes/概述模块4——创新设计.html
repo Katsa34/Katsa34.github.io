@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#151614"><meta name="color-scheme" content="dark"><meta http-equiv="Content-Security-Policy" content="connect-src 'none'; form-action 'none'; object-src 'none'"><title>概述模块4——创新设计</title><script>
+    // 在首屏绘制前恢复已选主题；浏览器禁用存储时仍可正常使用。
+    (() => {
+      let theme = "dark";
+      try {
+        const saved = localStorage.getItem("katsa34-theme");
+        if (saved === "dark" || saved === "light") theme = saved;
+      } catch {}
+      document.documentElement.dataset.theme = theme;
+      document.querySelector('meta[name="theme-color"]').content =
+        theme === "light" ? "#f4eed8" : "#151614";
+      document.querySelector('meta[name="color-scheme"]').content = theme;
+    })();
+  </script><link rel="stylesheet" href="site-theme.css"></head><body id="top" class="document-page source-page source-id-2553"><a class="skip" href="#main">跳到主要内容</a><header class="site-header container">
+  <a class="brand" href="/" aria-label="Katsa34 首页"><span class="brand-symbol" aria-hidden="true">K</span><span class="brand-name" lang="en">Katsa34</span></a>
+  <nav class="nav-links" aria-label="主导航"><a href="/">首页</a><a href="/#projects">项目</a><a href="/#about">关于</a></nav>
+</header><main id="main" class="container document-main" tabindex="-1"><nav class="document-nav" aria-label="项目导航"><a href="index.html">未橙项目</a><span aria-hidden="true">/</span><a href="未橙 · 项目资料目录.html">资料目录</a></nav><header class="document-heading"><h1>概述模块4——创新设计</h1></header><article class="source-article" id="source-content"><div class="desc mt--20" style="word-wrap:break-word;">
+                                        <p class="bk_pra"></p><p>序</p><p>“为了更好地用我们的手完成那些乳母帮我们做过的事，创新对于我们而言是必不可少的。”——反哺会成员<strong>◼◼◼</strong><strong>，</strong>2199年冬</p><p>第一节</p><p>为了在环保、功能和创新上取得平衡，我们采取半地下结构,地上地下各司其职,地上建筑模仿梯田结构,融合武陵城建筑美学和仿生建筑,仿生部分采用伞藻样式，中部洞口用于通风，伞柄容纳功能区,顶部用于光伏发电,同时加入菌体仿生学,中式建筑部分与仿生学建筑构成新形态园林图景,整体建筑风格美观、有设计感，同时能做到一建筑多用途，环保且创新。</p><p>第二节</p><p>对生活质量的考量层面，我们对废水处理进行了创新。腾冲附近地形多山地，我们采用无动力强化湿地系统，利用地势差形成重力流，让化粪池尾水经湿地系统进行无害化处理，经过处理的废水能做到完全无污染排入河流或用于灌溉，在尽可能减小对环境的影响的同时相对绿色，废水处理的相关能耗也大幅下降。</p><p>第三节</p><p>农业方面的创新体现在将农田,菌子工厂,微藻养殖,稻鱼养殖等不同形态新农业结合,组成全新系统,相辅相成,充分利用各模块的废料等,发扬云南农业食品文化,同时为居民提供丰富的食品体验和充足的营养供应.</p><p>第四节</p><p>能源方面,我们创新性地以地热为主力,梯级利用不同深度的地热能,直接运用地热供暖来降低能耗,同时综合运用多种形式的自然界能量,在合理利用自然的同时不会对自然产生过度影响.</p>
+                                    </div></article></main><footer class="site-footer container"><p><span lang="en">Katsa34</span> · 未橙</p><div class="footer-links"><a href="index.html">返回项目</a><a href="未橙 · 项目资料目录.html">资料目录</a><a href="#top">回到顶部 ↑</a></div></footer><button id="theme-toggle" class="theme-toggle" type="button"
+    aria-label="切换到浅色模式" title="切换到浅色模式" hidden>
+    <svg class="theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" aria-hidden="true" focusable="false">
+      <circle cx="12" cy="12" r="4"></circle>
+      <path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+    </svg>
+    <svg class="theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+      <path d="M20.5 14A8.5 8.5 0 0 1 10 3.5 8.5 8.5 0 1 0 20.5 14Z"></path>
+    </svg>
+    <span class="theme-toggle-label">浅色</span>
+  </button><script>
+    (() => {
+      const root = document.documentElement;
+      const toggle = document.getElementById("theme-toggle");
+      const label = toggle.querySelector(".theme-toggle-label");
+      let isSwitching = false;
+
+      function applyTheme(theme) {
+        root.dataset.theme = theme;
+        const isLight = theme === "light";
+        const action = isLight ? "切换到深色模式" : "切换到浅色模式";
+        label.textContent = isLight ? "深色" : "浅色";
+        toggle.setAttribute("aria-label", action);
+        toggle.title = action;
+        document.querySelector('meta[name="theme-color"]').content =
+          getComputedStyle(root).getPropertyValue("--page").trim();
+        document.querySelector('meta[name="color-scheme"]').content = theme;
+      }
+
+      applyTheme(root.dataset.theme === "light" ? "light" : "dark");
+      toggle.hidden = false;
+      toggle.addEventListener("click", async () => {
+        if (isSwitching) return;
+        const theme = root.dataset.theme === "light" ? "dark" : "light";
+        const update = () => {
+          applyTheme(theme);
+          try { localStorage.setItem("katsa34-theme", theme); } catch {}
+        };
+
+        if (!document.startViewTransition || matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          update();
+          return;
+        }
+
+        const rect = toggle.getBoundingClientRect();
+        const x = rect.left + rect.width / 2;
+        const y = rect.top + rect.height / 2;
+        const radius = Math.ceil(Math.hypot(
+          Math.max(x, innerWidth - x), Math.max(y, innerHeight - y)
+        )) + 1;
+        root.style.setProperty("--theme-origin-x", `${x}px`);
+        root.style.setProperty("--theme-origin-y", `${y}px`);
+        root.style.setProperty("--theme-radius", `${radius}px`);
+
+        isSwitching = true;
+        try {
+          const transition = document.startViewTransition(update);
+          transition.ready.catch(() => {});
+          await transition.finished;
+        } catch {
+          update();
+        } finally {
+          isSwitching = false;
+        }
+      });
+    })();
+  </script></body></html>

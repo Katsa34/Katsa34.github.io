@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#151614"><meta name="color-scheme" content="dark"><meta http-equiv="Content-Security-Policy" content="connect-src 'none'; form-action 'none'; object-src 'none'"><title>概述模块3——设计概览</title><script>
+    // 在首屏绘制前恢复已选主题；浏览器禁用存储时仍可正常使用。
+    (() => {
+      let theme = "dark";
+      try {
+        const saved = localStorage.getItem("katsa34-theme");
+        if (saved === "dark" || saved === "light") theme = saved;
+      } catch {}
+      document.documentElement.dataset.theme = theme;
+      document.querySelector('meta[name="theme-color"]').content =
+        theme === "light" ? "#f4eed8" : "#151614";
+      document.querySelector('meta[name="color-scheme"]').content = theme;
+    })();
+  </script><link rel="stylesheet" href="site-theme.css"></head><body id="top" class="document-page source-page source-id-2552"><a class="skip" href="#main">跳到主要内容</a><header class="site-header container">
+  <a class="brand" href="/" aria-label="Katsa34 首页"><span class="brand-symbol" aria-hidden="true">K</span><span class="brand-name" lang="en">Katsa34</span></a>
+  <nav class="nav-links" aria-label="主导航"><a href="/">首页</a><a href="/#projects">项目</a><a href="/#about">关于</a></nav>
+</header><main id="main" class="container document-main" tabindex="-1"><nav class="document-nav" aria-label="项目导航"><a href="index.html">未橙项目</a><span aria-hidden="true">/</span><a href="未橙 · 项目资料目录.html">资料目录</a></nav><header class="document-heading"><h1>概述模块3——设计概览</h1></header><article class="source-article" id="source-content"><div class="desc mt--20" style="word-wrap:break-word;">
+                                        <p class="bk_pra"></p><p><span style="font-family:方正小标宋简体;font-size:14px;">总体设计</span></p><p style="text-indent:21.0000pt;"><span style="font-family:宋体;font-size:14px;">旧世界的危机在于ai能力日益强大后人类眩晕瘫坐的病症和自身意义感的缺失,以及在人类放弃对ai掌控后ai</span><span style="font-family:宋体;font-size:14px;">“</span><span style="font-family:宋体;font-size:14px;">乳母</span><span style="font-family:宋体;font-size:14px;">”</span><span style="font-family:宋体;font-size:14px;">为了满足人类所进行的无节制消耗.为了解决这些问题,在新世界中我们以奶龙,牛来,袋鼠背后延展的人类创造力为精神引领,强调</span><span style="font-family:宋体;font-size:14px;">“</span><span style="font-family:宋体;font-size:14px;">自然</span><span style="font-family:宋体;font-size:14px;">”</span><span style="font-family:宋体;font-size:14px;">和</span><span style="font-family:宋体;font-size:14px;">“</span><span style="font-family:宋体;font-size:14px;">动手做</span><span style="font-family:宋体;font-size:14px;">”</span><span style="font-family:宋体;font-size:14px;">的理念,将千疮百孔的世界倒退回随自然循环运转的系统,在人类亲自动手来打造和维护新世界的过程中找回生活的意义感和人类的自我认同,从而创造一个在物质上满足,在精神上富足的新世界.</span></p><p style="text-indent:21.0000pt;"><span style="font-family:宋体;font-size:14px;">我们的总对策是将原本ai打造的供应链还原为自然过程,不用复杂的工业代替自然界自身的功能;减少ai和自动化的水平,通过人工种植,人工维护等适当劳动找回返璞归真的生活乐趣;发扬二十世纪二十年代文化的解构性和创造力,避免陷入前ai时代的功利主义进而重蹈覆辙.</span></p><p style="text-indent:21.0000pt;"><span style="font-family:宋体;font-size:14px;"> </span></p><p><span style="font-family:方正小标宋简体;font-size:14px;">总体形貌</span></p><p style="text-indent:21.0000pt;"><span style="font-family:宋体;font-size:14px;">总体是宽而低的建筑,采用半地下式设计,融合武陵城中式美学和仿生学设计,兼顾美观和功能.地表设计为梯田式,分为种植区域,公共空间,顶部光伏发电等,地下为储备区,工业区,菌子工厂,能源层等,充分利用横向和纵向空间资源.在城区中点缀橙黄元素和随机出现的三黄形象,增添活力.</span></p><p><span style="font-family:宋体;font-size:14px;"> </span></p><p><span style="font-family:方正小标宋简体;font-size:14px;">模块设计</span></p><p><span style="font-family:黑体;font-size:14px;">能源系统 </span></p><p><span style="font-family:Calibri;font-size:14px;"> </span></p><p><span style="font-family:宋体;font-size:14px;">腾冲地区能源丰富,可以综合利用不同能源.以腾冲丰富的地热能为取热主力,取暖保温等直接依靠地热减少能耗,通过梯级利用充分发挥地热作用.使用宽式建筑将光伏发电与大面积的屋顶墙面结合,补充所需能量.径流式小水电提供电力核基,与光伏发电在旱季雨季互补.生物质沼气将三废变为燃料.核能堆作为备用能源.储能方面运用LAES压缩空气储能,铁-空气电池等技术满足不同时长的储能需求.排热方面使用辐射制冷技术.</span></p><p><span style="font-family:黑体;font-size:14px;"> </span></p><p><span style="font-family:黑体;font-size:14px;">农业与食品系统</span></p><p><span style="font-family:宋体;font-size:14px;">露天大田,温室种植土豆等主粮,提供主要能量来源.蛋白来源来自屋顶的微藻池,传承自云南梯田的稻鱼池,</span><span style="font-family:宋体;color:rgb(15,17,21);font-style:normal;font-size:14px;background:rgb(255,255,255);">黑水虻</span><span style="font-family:宋体;color:rgb(15,17,21);font-style:normal;font-size:14px;background:rgb(255,255,255);">转化</span><span style="font-family:宋体;font-size:14px;">以及云南特色菌子工厂等,结合3d打印肉类技术加工.同时墙面种植发光藻类提供光源和装饰.在城外引导生态演化,</span><span style="font-family:宋体;color:rgb(15,17,21);font-style:normal;font-size:14px;background:rgb(255,255,255);">模仿自然从裸地到森林的中间阶段，用可收获的方式取食，同时是农田、是缓冲带、是物种源区</span><span style="font-family:宋体;color:rgb(15,17,21);font-style:normal;font-size:14px;background:rgb(255,255,255);">.</span></p><p><span style="font-family:黑体;color:rgb(15,17,21);font-style:normal;font-size:14px;background:rgb(255,255,255);"> </span></p><p><span style="font-family:黑体;color:rgb(15,17,21);font-style:normal;font-size:14px;background:rgb(255,255,255);">工业系统</span></p><p><span style="font-family:宋体;color:rgb(15,17,21);font-style:normal;font-size:14px;background:rgb(255,255,255);">轻工业为主,覆盖食品加工,纺织,日用品.重工业以回收为主,配合3d打印技术进行再制造.高温工序设计为间歇式,充分应用盈余电量.同时运用菌子工厂的产品生产菌体丝材料.</span></p><p><span style="font-family:宋体;color:rgb(15,17,21);font-style:normal;font-size:14px;background:rgb(255,255,255);"> </span></p><p><span style="font-family:黑体;color:rgb(15,17,21);font-style:normal;font-size:14px;background:rgb(255,255,255);">交通系统</span></p><p><span style="font-family:宋体;color:rgb(15,17,21);font-style:normal;font-size:14px;background:rgb(255,255,255);">城区集中不分散,交通以步行和骑行为主,缓行于生态连廊,在慢节奏中感受自然.台地之间使用缆车与升降平台,垂直交通使用电梯,电动轨道小车执行物品运输功能,没有大型交通工具,不追求效率,而追求低能耗与舒适.</span></p><p><span style="font-family:宋体;color:rgb(15,17,21);font-style:normal;font-size:14px;background:rgb(255,255,255);"> </span></p><p><span style="font-family:黑体;color:rgb(15,17,21);font-style:normal;font-size:14px;background:rgb(255,255,255);">循环系统</span></p><p><span style="font-family:宋体;color:rgb(15,17,21);font-style:normal;font-size:14px;background:rgb(255,255,255);">以无动力强化湿地系统为核心,形成闭合循环,依靠重力自流,在生态塘中净化最后回用.玻璃金属陶瓷等无机材料可反复熔炼,循环利用.</span></p><p><span style="font-family:宋体;color:rgb(15,17,21);font-style:normal;font-size:14px;background:rgb(255,255,255);"> </span></p><p><span style="font-family:黑体;color:rgb(15,17,21);font-style:normal;font-size:14px;background:rgb(255,255,255);">医疗卫生系统</span></p><p><span style="font-family:宋体;color:rgb(15,17,21);font-style:normal;font-size:14px;background:rgb(255,255,255);">预防先于治疗,通过新风系统,气体与水质在线监测等预防密闭世界中容易发生的传染病等疾病.手术室与药房放在地下,地上为病房.药品少数靠自己合成,其余靠云南本地药用植物,比如</span><span style="font-family:宋体;color:rgb(15,17,21);font-style:normal;font-size:14px;background:rgb(255,255,255);">三七、天麻、重楼、灯盏花、茯苓</span><span style="font-family:宋体;color:rgb(15,17,21);font-style:normal;font-size:14px;background:rgb(255,255,255);">等.运用温泉资源理疗,通过园艺治疗等劳动缓解心理疾病.</span></p><p><span style="font-family:宋体;color:rgb(15,17,21);font-style:normal;font-size:14px;background:rgb(255,255,255);"> </span></p><p><span style="font-family:黑体;color:rgb(15,17,21);font-style:normal;font-size:14px;background:rgb(255,255,255);">生活文化系统</span></p><p><span style="font-family:宋体;color:rgb(15,17,21);font-style:normal;font-size:14px;background:rgb(255,255,255);">教育方面强调文化传承和实践教育,在对过往文化符号的解构中获得对抗生活困难的力量,在实践中强化意义感.利用湿地和温泉等打造公共空间,融合休闲功能和文化功能.以三黄文化为根基,设定各种文化节日,增强凝聚力.</span></p><p><span style="font-family:黑体;color:rgb(15,17,21);font-style:normal;font-size:14px;background:rgb(255,255,255);"> </span></p><p><br></p>
+                                    </div></article></main><footer class="site-footer container"><p><span lang="en">Katsa34</span> · 未橙</p><div class="footer-links"><a href="index.html">返回项目</a><a href="未橙 · 项目资料目录.html">资料目录</a><a href="#top">回到顶部 ↑</a></div></footer><button id="theme-toggle" class="theme-toggle" type="button"
+    aria-label="切换到浅色模式" title="切换到浅色模式" hidden>
+    <svg class="theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" aria-hidden="true" focusable="false">
+      <circle cx="12" cy="12" r="4"></circle>
+      <path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+    </svg>
+    <svg class="theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+      <path d="M20.5 14A8.5 8.5 0 0 1 10 3.5 8.5 8.5 0 1 0 20.5 14Z"></path>
+    </svg>
+    <span class="theme-toggle-label">浅色</span>
+  </button><script>
+    (() => {
+      const root = document.documentElement;
+      const toggle = document.getElementById("theme-toggle");
+      const label = toggle.querySelector(".theme-toggle-label");
+      let isSwitching = false;
+
+      function applyTheme(theme) {
+        root.dataset.theme = theme;
+        const isLight = theme === "light";
+        const action = isLight ? "切换到深色模式" : "切换到浅色模式";
+        label.textContent = isLight ? "深色" : "浅色";
+        toggle.setAttribute("aria-label", action);
+        toggle.title = action;
+        document.querySelector('meta[name="theme-color"]').content =
+          getComputedStyle(root).getPropertyValue("--page").trim();
+        document.querySelector('meta[name="color-scheme"]').content = theme;
+      }
+
+      applyTheme(root.dataset.theme === "light" ? "light" : "dark");
+      toggle.hidden = false;
+      toggle.addEventListener("click", async () => {
+        if (isSwitching) return;
+        const theme = root.dataset.theme === "light" ? "dark" : "light";
+        const update = () => {
+          applyTheme(theme);
+          try { localStorage.setItem("katsa34-theme", theme); } catch {}
+        };
+
+        if (!document.startViewTransition || matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          update();
+          return;
+        }
+
+        const rect = toggle.getBoundingClientRect();
+        const x = rect.left + rect.width / 2;
+        const y = rect.top + rect.height / 2;
+        const radius = Math.ceil(Math.hypot(
+          Math.max(x, innerWidth - x), Math.max(y, innerHeight - y)
+        )) + 1;
+        root.style.setProperty("--theme-origin-x", `${x}px`);
+        root.style.setProperty("--theme-origin-y", `${y}px`);
+        root.style.setProperty("--theme-radius", `${radius}px`);
+
+        isSwitching = true;
+        try {
+          const transition = document.startViewTransition(update);
+          transition.ready.catch(() => {});
+          await transition.finished;
+        } catch {
+          update();
+        } finally {
+          isSwitching = false;
+        }
+      });
+    })();
+  </script></body></html>

@@ -1,0 +1,574 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#151614"><meta name="color-scheme" content="dark"><meta http-equiv="Content-Security-Policy" content="connect-src 'none'; form-action 'none'; object-src 'none'"><title>能源模块2——细节设计</title><script>
+    // 在首屏绘制前恢复已选主题；浏览器禁用存储时仍可正常使用。
+    (() => {
+      let theme = "dark";
+      try {
+        const saved = localStorage.getItem("katsa34-theme");
+        if (saved === "dark" || saved === "light") theme = saved;
+      } catch {}
+      document.documentElement.dataset.theme = theme;
+      document.querySelector('meta[name="theme-color"]').content =
+        theme === "light" ? "#f4eed8" : "#151614";
+      document.querySelector('meta[name="color-scheme"]').content = theme;
+    })();
+  </script><style>
+
+.op{font-family:Inter,system-ui,-apple-system,"Segoe UI","Noto Sans SC","Microsoft YaHei",sans-serif;
+  color:#1F1B16;background:#FBFAF6;font-size:16px;line-height:1.85;text-align:left;
+  -webkit-text-size-adjust:100%;box-sizing:border-box;overflow-x:hidden;}
+.op *,.op *::before,.op *::after{box-sizing:border-box;}
+.op img{max-width:100%;height:auto;}
+.op svg{max-width:100%;height:auto;display:block;}
+.op,.op *{word-break:normal !important;overflow-wrap:break-word;}
+.op .metric .v{font-size:25px;white-space:nowrap;}
+.op .metric .u{display:block;margin-left:0;font-size:13px;margin-top:1px;}
+.op *, .op *::before, .op *::after{box-sizing:border-box}.op{-webkit-text-size-adjust:100%}.op{
+  margin:0;background:#FBFAF6;color:#15120D;
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB",
+              "Microsoft YaHei","Source Han Sans SC","Noto Sans CJK SC",sans-serif;
+  font-size:16px;line-height:1.85;letter-spacing:.01em;
+  -webkit-font-smoothing:antialiased;
+}.op .wrap{max-width:1060px;margin:0 auto;padding:0 30px 110px}.op /* ---------- top bar ---------- */
+.topbar{
+  position:sticky;top:0;z-index:60;
+  background:rgba(251,250,246,.88);backdrop-filter:saturate(180%) blur(14px);
+  border-bottom:1px solid #E4DDD0;
+}.op .topbar-in{max-width:1060px;margin:0 auto;padding:0 30px;height:58px;
+  display:flex;align-items:center;gap:28px}.op .brand{font-size:13.5px;font-weight:700;letter-spacing:.14em;color:#15120D;
+  text-transform:uppercase;white-space:nowrap}.op .brand span{color:#C2410C}.op .topnav{display:flex;gap:6px;margin-left:auto;flex-wrap:wrap}.op .topnav a{
+  font-size:13.5px;color:#6D6458;text-decoration:none;padding:7px 14px;
+  border-radius:8px;transition:.16s;white-space:nowrap;
+}.op .topnav a:hover{background:#F0EBE1;color:#3B352C}.op .topnav a.on{background:#15120D;color:#FBFAF6}.op /* ---------- cover ---------- */
+.cover{padding:88px 0 56px;border-bottom:1px solid #E4DDD0;margin-bottom:64px}.op .kicker{font-size:12.5px;letter-spacing:.26em;text-transform:uppercase;
+  color:#C2410C;font-weight:700;margin-bottom:22px}.op .cover h1{
+  font-size:56px;line-height:1.16;letter-spacing:-.022em;font-weight:750;
+  margin:0 0 24px;max-width:820px;
+}.op .cover .lede{font-size:18.5px;line-height:1.75;color:#3B352C;max-width:730px;margin:0}.op .cover .meta{margin-top:40px;display:flex;flex-wrap:wrap;gap:34px 48px;
+  font-size:13.5px;color:#6D6458}.op .cover .meta b{display:block;color:#15120D;font-size:15.5px;font-weight:650;
+  margin-top:3px;letter-spacing:.01em}.op /* ---------- sections ---------- */
+section{margin:0 0 88px;scroll-margin-top:78px}.op .sec-head{display:flex;align-items:baseline;gap:20px;
+  border-bottom:1.5px solid #15120D;padding-bottom:14px;margin-bottom:34px}.op .sec-num{font-size:14px;font-weight:750;letter-spacing:.1em;color:#C2410C;
+  font-variant-numeric:tabular-nums;white-space:nowrap}.op .sec-head h2{font-size:29px;line-height:1.3;letter-spacing:-.014em;
+  margin:0;font-weight:720}.op .sec-head .tag{margin-left:auto;font-size:12.5px;color:#6D6458;
+  letter-spacing:.06em;white-space:nowrap}.op h3{font-size:20px;line-height:1.45;letter-spacing:-.008em;font-weight:700;
+  margin:46px 0 16px}.op h4{font-size:16px;font-weight:700;margin:30px 0 10px;color:#3B352C}.op p{margin:0 0 16px;color:#322D26}.op p.lead{font-size:17.5px;color:#3B352C;line-height:1.8}.op strong{font-weight:700;color:#15120D}.op em.hl{font-style:normal;background:linear-gradient(transparent 62%,#F6DFCF 62%);
+  padding:0 1px}.op .quiet{color:#6D6458;font-size:14.5px}.op .mono{font-variant-numeric:tabular-nums}.op /* ---------- cards ---------- */
+.card{background:#FFFFFF;border:1px solid #E4DDD0;border-radius:15px;
+  padding:28px 30px;margin:22px 0;
+  box-shadow:0 1px 2px rgba(21,18,13,.03),0 8px 26px -18px rgba(21,18,13,.16)}.op .card>h4:first-child{margin-top:0}.op .card.tint-geo{background:#FFF0E6;border-color:#F4CDB4}.op .card.tint-pv{background:#FDF4E3;border-color:#F0DDBB}.op .card.tint-es{background:#EEF4FB;border-color:#C9DCF0}.op .card.tint-bio{background:#F2F5E8;border-color:#D6DEBF}.op .card.tint-grid{background:#EAF3F0;border-color:#C6DED6}.op /* ---------- metric row ---------- */
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(158px,1fr));
+  gap:1px;background:#E4DDD0;border:1px solid #E4DDD0;border-radius:15px;
+  overflow:hidden;margin:26px 0}.op .metric{background:#FFFFFF;padding:22px 22px 20px}.op .metric .k{font-size:12px;letter-spacing:.1em;color:#6D6458;
+  text-transform:uppercase;margin-bottom:8px}.op .metric .v{font-size:27px;font-weight:730;letter-spacing:-.02em;line-height:1.1;
+  font-variant-numeric:tabular-nums}.op .metric .u{font-size:14px;font-weight:600;color:#6D6458;margin-left:3px;
+  letter-spacing:0}.op .metric .s{font-size:13px;color:#6D6458;margin-top:6px;line-height:1.5}.op /* ---------- tables ---------- */
+.tbl-wrap{overflow-x:auto;margin:24px 0;-webkit-overflow-scrolling:touch}.op table{width:100%;border-collapse:collapse;font-size:14.6px;line-height:1.6;
+  background:#FFFFFF}.op caption{caption-side:top;text-align:left;font-size:13px;color:#6D6458;
+  letter-spacing:.06em;padding:0 0 10px}.op th, .op td{padding:11px 14px;text-align:left;border-bottom:1px solid #EDE7DC;
+  vertical-align:top}.op thead th{background:#F5F1E9;font-weight:700;color:#3B352C;font-size:13.2px;
+  letter-spacing:.02em;border-bottom:1px solid #DED6C6;white-space:nowrap}.op tbody tr:nth-child(even){background:#FCFAF6}.op tbody tr:last-child td{border-bottom:1px solid #DED6C6}.op tr.total td{background:#F5F1E9;font-weight:700;color:#15120D;
+  border-top:1.5px solid #DED6C6}.op td.n, .op th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}.op td.c, .op th.c{text-align:center}.op td.dim{color:#6D6458}.op /* ---------- field / calc blocks (detail style) ---------- */
+.field{margin:0 0 4px}.op .field .fname{font-weight:700;color:#15120D}.op .calc{background:#FAF7F1;border-left:3px solid #DED6C6;border-radius:0 10px 10px 0;
+  padding:13px 20px;margin:0 0 26px;font-size:14.6px;line-height:1.78;
+  color:#463F34}.op .calc b{color:#15120D}.op .calc .lbl{font-weight:700;color:#C2410C;letter-spacing:.04em;margin-right:6px}.op /* ---------- innovation blocks ---------- */
+.inno{border:1px solid #E4DDD0;border-radius:16px;background:#FFFFFF;
+  margin:30px 0;overflow:hidden;
+  box-shadow:0 1px 2px rgba(21,18,13,.03),0 10px 30px -20px rgba(21,18,13,.18)}.op .inno-hd{display:flex;align-items:flex-start;gap:18px;padding:24px 30px 20px;
+  border-bottom:1px solid #EDE7DC;background:#FCFAF6}.op .inno-no{flex:0 0 auto;width:44px;height:44px;border-radius:11px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;font-weight:750;color:#fff;background:#C2410C;
+  font-variant-numeric:tabular-nums}.op .inno.no-pv .inno-no{background:#B45309}.op .inno.no-es .inno-no{background:#1D4E89}.op .inno.no-bio .inno-no{background:#5A6E2F}.op .inno-hd .tt{flex:1}.op .inno-hd h3{margin:0 0 4px;font-size:20px;line-height:1.4}.op .inno-hd .sub{font-size:13.5px;color:#6D6458;letter-spacing:.02em}.op .inno-bd{padding:24px 30px 8px}.op .inno-bd .blk{margin-bottom:22px}.op .inno-bd .blk .lb{font-size:12px;letter-spacing:.14em;color:#C2410C;
+  font-weight:700;text-transform:uppercase;margin-bottom:7px}.op .inno.no-pv .inno-bd .blk .lb{color:#B45309}.op .inno.no-es .inno-bd .blk .lb{color:#1D4E89}.op .inno.no-bio .inno-bd .blk .lb{color:#5A6E2F}.op .inno-bd p{margin:0 0 12px;font-size:15.4px;line-height:1.8}.op .inno-bd ul{margin:0 0 12px;padding-left:20px}.op .inno-bd li{margin:0 0 7px;font-size:15.2px;line-height:1.75}.op .src{font-size:13.6px;color:#6D6458;line-height:1.8;word-break:break-word}.op .src code{font-size:12.6px;background:#F5F1E9;padding:1px 6px;border-radius:5px;
+  color:#3B352C}.op /* ---------- figure ---------- */
+figure{margin:28px 0 30px}.op figcaption{font-size:13px;color:#6D6458;letter-spacing:.03em;margin-top:12px;
+  text-align:center;line-height:1.7}.op .figbox{background:#FFFFFF;border:1px solid #E4DDD0;border-radius:15px;
+  padding:22px 18px;overflow-x:auto}.op .figbox svg{display:block;margin:0 auto;max-width:100%;height:auto}.op /* ---------- two column ---------- */
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin:22px 0}.op .cols>*{margin:0}.op /* ---------- callout ---------- */
+.note{border:1px solid #E4DDD0;border-left:4px solid #C2410C;border-radius:0 12px 12px 0;
+  background:#FFF9F4;padding:18px 24px;margin:24px 0;font-size:15px;line-height:1.78}.op .note.es{border-left-color:#1D4E89;background:#F6FAFE}.op .note.pv{border-left-color:#B45309;background:#FEFAF1}.op .note .t{font-weight:700;display:block;margin-bottom:6px;color:#15120D}.op /* ---------- legend ---------- */
+.legend{display:flex;flex-wrap:wrap;gap:10px 22px;margin:14px 0 0;
+  font-size:13.4px;color:#3B352C}.op .legend i{display:inline-block;width:11px;height:11px;border-radius:3px;
+  margin-right:7px;vertical-align:-1px}.op /* ---------- footer ---------- */
+footer{border-top:1px solid #E4DDD0;margin-top:40px;padding-top:30px;
+  font-size:13.4px;color:#6D6458;line-height:1.85}.op footer .tt{font-weight:700;color:#15120D;font-size:14.5px;margin-bottom:8px}.op /* ---------- print ---------- */
+@media print{
+  body{background:#fff;font-size:11.5pt}
+  .topbar{display:none}
+  .wrap{max-width:none;padding:0}
+  section{page-break-inside:auto;margin-bottom:34pt}
+  .card,.inno,.figbox,table,.note{page-break-inside:avoid}
+  .sec-head h2{font-size:18pt}
+  .cover h1{font-size:26pt}
+  h3{page-break-after:avoid}
+}
+@media (max-width:760px){.op .wrap{padding:0 18px 70px}.op .cover{padding:56px 0 40px}.op .cover h1{font-size:34px}.op .cover .lede{font-size:16px}.op .topbar-in{padding:0 18px;gap:12px}.op .brand{font-size:12px}.op .topnav a{padding:6px 9px;font-size:12.5px}.op .cols{grid-template-columns:1fr}.op .sec-head h2{font-size:22px}.op .card{padding:20px 18px}.op .inno-hd{padding:18px}.op .inno-bd{padding:18px 18px 4px}.op table{font-size:13.4px}.op th, .op td{padding:9px 10px}
+}.op .srclist{list-style:none;margin:18px 0 0;padding:0;counter-reset:s}.op .srclist li{display:flex;gap:14px;padding:15px 0;border-bottom:1px solid #EDE7DC;
+  font-size:14.4px;line-height:1.7}.op .srclist li:last-child{border-bottom:0}.op .srclist .n{flex:0 0 30px;color:#C2410C;font-weight:750;letter-spacing:.06em;
+  font-variant-numeric:tabular-nums;padding-top:1px}.op .srclist .b{flex:1;min-width:0}.op .srclist .b b{color:#15120D;font-weight:650;display:block;margin-bottom:2px}.op .srclist .o{color:#6D6458;display:block;font-size:13.4px;margin-bottom:5px}.op .srclist a{color:#1D4E89;font-size:12.8px;word-break:break-all;text-decoration:none;
+  border-bottom:1px solid #D7E2F0}.op .srclist a:hover{color:#C2410C;border-bottom-color:#F4CDB4}
+@media print{.op .srclist a{color:#15120D;border:0}}
+
+</style><link rel="stylesheet" href="site-theme.css"></head><body id="top" class="document-page source-page source-id-2555"><a class="skip" href="#main">跳到主要内容</a><header class="site-header container">
+  <a class="brand" href="/" aria-label="Katsa34 首页"><span class="brand-symbol" aria-hidden="true">K</span><span class="brand-name" lang="en">Katsa34</span></a>
+  <nav class="nav-links" aria-label="主导航"><a href="/">首页</a><a href="/#projects">项目</a><a href="/#about">关于</a></nav>
+</header><main id="main" class="container document-main" tabindex="-1"><nav class="document-nav" aria-label="项目导航"><a href="index.html">未橙项目</a><span aria-hidden="true">/</span><a href="未橙 · 项目资料目录.html">资料目录</a></nav><header class="document-heading"><h1>能源模块2——细节设计</h1></header><article class="source-article" id="source-content"><div class="desc mt--20" style="word-wrap:break-word;">
+                                        <p class="bk_pra"><!-- 能源模块 · 整页嵌入 -->
+</p><div class="op">
+
+<div class="wrap">
+
+<header class="cover">
+  <div class="kicker">百万立方未来世界 · 能源模块</div>
+  <h1>细节设计：从岩层温度到<br>插座电压的每一段推导</h1>
+  <p class="lede">本文按「方案形态 — 关键参数 — 计算过程 — 结果」四段式，逐模块给出地热发电、
+  热电联产、传输、废热处理、屋面光谱分光光伏、三级储能与生物质的完整设计，所有数字都可沿算式回溯。</p>
+  <div class="meta">
+    <div>总装机<b>7.19 MWe</b></div>
+    <div>年净供电<b>17.00 GWh</b></div>
+    <div>地热井深<b>6,899 m</b></div>
+    <div>屋面面积<b>80,000 m²</b></div>
+    <div>储能<b>105.04 MWh</b></div>
+  </div>
+</header>
+
+<section id="s1">
+  <div class="sec-head"><div class="sec-num">01</div><h2>地热发电模块</h2>
+    <div class="tag">CLOSED-LOOP GEOTHERMAL · 1.05 MWe</div></div>
+
+  <p class="lead">形态是<strong>闭式深井地热循环</strong>：2 口竖井加 15 条井底水平段构成地下闭环，水基工质自然循环，
+  不取地下水、不压裂、无闪蒸；地面只有 1 台 ORC 机组和 1 座干冷塔。井下没有任何转动部件。</p>
+
+  <h3>1.1　总体指标</h3>
+  <div class="tbl-wrap"><table>
+    <caption>表 1-1　发电模块关键参数</caption>
+    <thead><tr><th style="width:190px">参数</th><th style="width:270px">数值</th><th>口径</th></tr></thead>
+    <tbody>
+      <tr><td>装机量</td><td class="n">毛 1.05 MWe ｜ 净送出 1.00 MWe</td><td class="dim">厂用电 0.05 MWe</td></tr>
+      <tr><td>年发电量</td><td class="n">净 8.00 GWh（毛 8.40 GWh）</td><td class="dim">第 1 年至第 100 年恒定</td></tr>
+      <tr><td>利用小时</td><td class="n">8,000 h</td><td class="dim">负荷率 91.3%</td></tr>
+      <tr><td>取热量</td><td class="n">10.574 MWth</td><td class="dim">84.6 GWh/年</td></tr>
+      <tr><td>毛效率</td><td class="n">9.92%</td><td class="dim">第二定律效率 0.4220 × (1 − 338.15/442.13)</td></tr>
+      <tr><td>循环流量</td><td class="n">24.0 kg/s</td><td class="dim">单相水</td></tr>
+      <tr><td>井底 / 井口温度</td><td class="n">250 ℃ / 168.98 ℃</td><td class="dim">井底压力下水不沸腾</td></tr>
+      <tr><td>厂用电率</td><td class="n">4.71%</td><td class="dim">0.049 ÷ 1.049</td></tr>
+      <tr><td>占用体积</td><td class="n">62,247 m³</td><td class="dim">井筒 61,123 + ORC 厂房 1,124</td></tr>
+      <tr><td>定员</td><td class="n">7 人</td><td class="dim">人均装机 0.143 MWe</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="note"><span class="t">计算过程</span>毛出力取第 100 年出力 1.049 MWe 圆整为 1.05；净 = 1.049 − 0.049 = 1.000 MWe；1.05 MWe × 8,000 h = 8,400 MWh 毛，减厂用 395 MWh 得 8,005 ≈ 8.00 GWh。供热量 4.2 GWh ÷ 8,000 h = 0.525 MWth，取 0.53。</div>
+
+  <h3>1.2　井深与井筒</h3>
+  <p>井深由<strong>岩石温度上限</strong>反推，而不是由经济性决定。本项目采用 250 ℃ 作为井底温度上限——
+  常规 MWD 与井下电子件的额定上限是 175 ℃；全金属、无弹性体的井下马达系统已有 300 ℃ 的现场试验记录（冰岛 IDDP-2，4,659 m）。本方案取 250 ℃，落在「实验室已认证、尚未大规模商用」的区间，由 SiC/GaN 电子与隔热钻杆撑起。</p>
+
+  <div class="tbl-wrap"><table>
+    <caption>表 1-2　井筒几何</caption>
+    <thead><tr><th style="width:190px">参数</th><th style="width:270px">数值</th><th>口径</th></tr></thead>
+    <tbody>
+      <tr><td>地温梯度</td><td class="n">33.05 ℃/km</td><td class="dim">腾冲实测</td></tr>
+      <tr><td>地表恒温层</td><td class="n">22 ℃</td><td class="dim">井筒传热边界</td></tr>
+      <tr><td>井底温度上限</td><td class="n">250 ℃</td><td class="dim">材料与电子器件共同约束</td></tr>
+      <tr><td>井深</td><td class="n">6,899 m × 2 口竖井</td><td class="dim">H = (250 − 22) ÷ 0.03305</td></tr>
+      <tr><td>井底水平段</td><td class="n">15 条 × 3,155 m</td><td class="dim">构成地下闭环换热段</td></tr>
+      <tr><td>井筒总长</td><td class="n">61,123 m</td><td class="dim">2 × 6,899 + 15 × 3,155</td></tr>
+      <tr><td>工质充装量</td><td class="n">约 2,330 m³</td><td class="dim">一次性充装，与岩层流体零接触</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="note"><span class="t">计算过程</span>H = (250 − 22) ÷ 0.03305 = 6,899 m；总长 = 2 × 6,899 + 15 × 3,155 = 61,123 m。井筒按 1 m 方块口径计体积——每延深 1 m 占 1 块，与井径无关——故井筒体积在数值上等于总长 61,123 m³。</div>
+
+  <h3>1.3　取热与效率</h3>
+  <div class="note"><span class="t">计算过程</span>Q = ṁ·cp·ΔT = 24.0 × 4.238 × (168.98 − 65) = 10,574 kW = 10.574 MWth；η = 0.4220 × (1 − 338.15/442.13) = 9.92%；毛出力 = 10.574 × 0.0992 = 1.049 MWe。注意冷端取 65 ℃ 而非常规 40 ℃——这一步主动让出约 4 个百分点发电效率，换来 9.525 MWth 的可交付热。</div>
+
+  <h3>1.4　循环水力：靠热虹吸自己转起来</h3>
+  <div class="tbl-wrap"><table>
+    <caption>表 1-3　自循环水力平衡</caption>
+    <thead><tr><th style="width:230px">项目</th><th style="width:190px">数值</th><th>说明</th></tr></thead>
+    <tbody>
+      <tr><td>循环泵功</td><td class="n">0</td><td class="dim">无泵，纯热虹吸驱动</td></tr>
+      <tr><td>热虹吸压头</td><td class="n">62.1 bar</td><td class="dim">Δp_b = (ρ冷 − ρ热)·g·H</td></tr>
+      <tr><td>沿程摩擦</td><td class="n">3.7 bar</td><td class="dim">Φ244.5 套管、24.0 kg/s</td></tr>
+      <tr><td>节流阀压降</td><td class="n">58.4 bar</td><td class="dim">吃掉富余压头，把流量压到 24.0 kg/s</td></tr>
+      <tr><td>自然循环能力</td><td class="n">182 kg/s</td><td class="dim">不限流时系统可达流量</td></tr>
+    </tbody>
+  </table></div>
+  <p>热虹吸压头 62.1 bar 远大于摩擦 3.7 bar，富余的 58.4 bar 由节流阀吃掉。这不是浪费——
+  它意味着<strong>系统在任何情况下都能靠自重启动</strong>，不需要启动泵、不需要外部电源，
+  对孤岛运行是决定性优势。</p>
+
+  <h3>1.5　体积与敏感性</h3>
+  <div class="tbl-wrap"><table>
+    <caption>表 1-4　发电模块体积构成</caption>
+    <thead><tr><th>项目</th><th class="n">体积 m³</th><th>口径</th></tr></thead>
+    <tbody>
+      <tr><td>井筒</td><td class="n">61,123</td><td class="dim">等于井筒总长</td></tr>
+      <tr><td>ORC 厂房</td><td class="n">1,124</td><td class="dim">1,427.9 × 1.049 / 1.3330</td></tr>
+      <tr class="total"><td>合计</td><td class="n">62,247</td><td class="dim">占全场 6.2247%</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="cols">
+    <div class="card tint-geo"><h4>梯度敏感</h4>
+      <p>梯度从 33.05 提到 40.7 ℃/km，井深变浅、井口温度升高，净电从 <strong>8.00 → 12.66 GWh</strong>，
+      增幅 58%。地温梯度是这套方案里最值钱的一个参数。</p></div>
+    <div class="card tint-geo"><h4>温度上限敏感</h4>
+      <p>上限从 250 降到 220 ℃，井深 6,899 → 5,991 m，井筒体积 61,123 → 59,307 m³、占比 6.22% → 6.04%，<b>体积反而变小</b>。真正的代价在井口温度：168.98 → 138.98 ℃，ORC 可用焓降少了约三成，净电从 8.00 GWh 掉到 6 GWh 量级。250 ℃ 不是为体积买的，是为电量买的。</p></div>
+  </div>
+
+  <div class="note"><span class="t">计算过程</span>同一几何只换岩石温度剖面：井深 = (T上限 − 22) ÷ 梯度。25 ℃ 的季节性井口温度变化已计入，故给出的净电区间是稳态年值而非瞬时峰值。</div>
+</section>
+
+<section id="s2">
+  <div class="sec-head"><div class="sec-num">02</div><h2>热电联产模块</h2>
+    <div class="tag">CHP · 65 ℃ 冷端</div></div>
+
+  <p class="lead">这一节是整个能源模块的枢纽。把 ORC 冷凝温度抬到 65 ℃，单台机组从「只发电」变成
+  「发电 + 供热」——代价是 4 个百分点的电效率，收益是 9.525 MWth / 76.2 GWh 的可交付热。</p>
+
+  <div class="tbl-wrap"><table>
+    <caption>表 2-1　热电联产参数</caption>
+    <thead><tr><th style="width:230px">参数</th><th style="width:250px">数值</th><th>说明</th></tr></thead>
+    <tbody>
+      <tr><td>供热装机</td><td class="n">0.525 MWth</td><td class="dim">世界级热需求 4.20 GWh ÷ 8,000 h</td></tr>
+      <tr><td>循环泵</td><td class="n">0.002 MWe</td><td class="dim">6.3 kg/s × 80 kPa ÷ 0.65</td></tr>
+      <tr><td>可交付热上限</td><td class="n">9.525 MWth ＝ 76.2 GWh/年</td><td class="dim">取热 − 毛发电</td></tr>
+      <tr><td>世界实际取热</td><td class="n">4.20 GWh/年</td><td class="dim">占可用上限 5.5%</td></tr>
+      <tr><td>供热温度</td><td class="n">65–90 ℃</td><td class="dim">ORC 冷凝器间接换热</td></tr>
+      <tr><td>储热</td><td class="n">2,000 m³ 常压热水罐 ＝ 46.5 MWh</td><td class="dim">ΔT 20 K</td></tr>
+      <tr><td>体积</td><td class="n">1,030 m³</td><td class="dim">罐体井口管道 330 + 热能输送 700</td></tr>
+      <tr><td>耗电量</td><td class="n">0.002 MWe ｜ 0.008 GWh/年</td><td class="dim">采暖季 4,000 h</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="note"><span class="t">计算过程</span>可交付热 = 取热 − 毛发电 = 10.574 − 1.049 = 9.525 MWth；× 8,000 h = 76.2 GWh/年。储热：4.186 × 10⁶ J/(m³·K) × 20 K × 2,000 m³ = 1.674 × 10¹¹ J = 46.5 MWh；世界口径日均热负荷 = 4.20 GWh ÷ 365 = 11.5 MWh/日，故 46.5 MWh 覆盖 4.0 天。日内削峰之外的季节性平衡由岩体本身承担——它是这套系统最大的一块蓄热体。</div>
+
+  <div class="note pv"><span class="t">为什么只用了 16.4%</span>
+  76.2 GWh 的可用热里，世界只消费 4.20 GWh。剩下的 71.99 GWh 必须排掉，这构成干冷塔的存在理由，
+  也解释了为什么废热模块的体积（1,047 m³）几乎与储热罐相当。<strong>热不是稀缺的，能装上它的负载才是稀缺的。</strong></div>
+</section>
+
+<section id="s3">
+  <div class="sec-head"><div class="sec-num">03</div><h2>传输模块</h2>
+    <div class="tag">TRANSMISSION · 10 kV</div></div>
+
+  <div class="tbl-wrap"><table>
+    <caption>表 3-1　电能与热能输送参数</caption>
+    <thead><tr><th style="width:210px">参数</th><th style="width:250px">数值</th><th>说明</th></tr></thead>
+    <tbody>
+      <tr><td>电压等级</td><td class="n">10 kV</td><td class="dim">场内环网</td></tr>
+      <tr><td>输送电流</td><td class="n">63.8 A</td><td class="dim">I = 1,049 ÷ (1.732 × 10 × 0.95)</td></tr>
+      <tr><td>导线</td><td class="n">3 × 95 mm² 铜芯，3 回</td><td class="dim">按载流量与 N-1 校核</td></tr>
+      <tr><td>送出距离</td><td class="n">1 km</td><td class="dim">井场至用能中心</td></tr>
+      <tr><td>线损功率</td><td class="n">0.002 MWe</td><td class="dim">3 × 63.8² × 0.193 Ω/km × 1 km</td></tr>
+      <tr><td>线损电量</td><td class="n">0.019 GWh/年</td><td class="dim">损耗率 0.22%</td></tr>
+      <tr><td>体积</td><td class="n">524 m³</td><td class="dim">地热管廊 174 + 电能输送 350</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="note"><span class="t">计算过程</span>I = 1,049 ÷ (1.732 × 10 × 0.95) = 63.8 A；按 95 mm² 载流量校核后取 3 回。3 × 63.8² × 0.193 Ω/km × 1 km = 2,357 W = 0.0024 MWe；÷ 1.049 = 0.22%；× 8,000 h = 0.019 GWh。管廊按管径 ∝ √流量缩放：300 × √(24.0 / 71.3) = 174 m³；电能侧 = 电缆沟 144 + 变电站 200 + 设备 60 = 350 m³。</div>
+
+  <p>传输距离只有 1 km，线损 0.22%，可以忽略。这里的工程重点不是降损，而是
+  <strong>N-1 冗余</strong>：3 回 95 mm² 中任一段故障，剩余回路仍能带满 1.05 MWe。</p>
+</section>
+
+<section id="s4">
+  <div class="sec-head"><div class="sec-num">04</div><h2>废热处理模块</h2>
+    <div class="tag">HEAT REJECTION · DRY COOLING</div></div>
+
+  <p class="lead">排热量 <strong>9.525 MWth / 76.2 GWh 每年</strong>，是天然大地热流（0.151 GWh/年）的
+  <strong>504 倍</strong>。这个数字决定了干冷塔必须是强制通风的，也决定了它只能干式运行——
+  腾冲雨季相对湿度 84%，湿式塔的补水与羽流在密闭立方体里都不可接受。</p>
+
+  <div class="tbl-wrap"><table>
+    <caption>表 4-1　干冷塔参数</caption>
+    <thead><tr><th style="width:210px">参数</th><th style="width:250px">数值</th><th>说明</th></tr></thead>
+    <tbody>
+      <tr><td>排热量</td><td class="n">9.525 MWth ＝ 76.2 GWh/年</td><td class="dim">取热 − 毛发电</td></tr>
+      <tr><td>风量</td><td class="n">290.6 m³/s</td><td class="dim">Q = ρ·cp·V·ΔT</td></tr>
+      <tr><td>空气温升</td><td class="n">33 K</td><td class="dim">进风 30 → 出风 63 ℃</td></tr>
+      <tr><td>塔体正面</td><td class="n">116.3 m²</td><td class="dim">迎面风速 2.5 m/s</td></tr>
+      <tr><td>塔高</td><td class="n">9.0 m</td><td class="dim">空冷翅片束竖直布置</td></tr>
+      <tr><td>补水</td><td class="n">无</td><td class="dim">仅除盐水初装，闭式循环</td></tr>
+      <tr><td>耗电量</td><td class="n">0.049 MWe ｜ 0.395 GWh/年</td><td class="dim">比功耗 156.9 W/(m³/s)</td></tr>
+      <tr><td>体积</td><td class="n">1,047 m³</td><td class="dim">116.3 × 9.0</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="note"><span class="t">计算过程</span>Q = ρ·cp·V_air·ΔT → 290.6 × 0.9882 × 1.005 × 33 = 9,523 kW ≈ 9.525 MWth；正面 = 290.6 ÷ 2.5 = 116.3 m²；体积 = 116.3 × 9.0 = 1,047 m³。风机功率 = 风量 × 比功耗 = 290.6 × 156.9 = 45.6 kW（解析值），取 49 kW；× 8,000 h = 0.395 GWh。</div>
+</section>
+
+<section id="s5">
+  <div class="sec-head"><div class="sec-num">05</div><h2>屋面光谱分光光伏</h2>
+    <div class="tag">DBR WAVEGUIDE + ACTIVE PEAK SHAVING</div></div>
+
+  <p class="lead">80,000 m² 屋面同时承担三件事：发电、给藻池供光、收集雨水。它靠的不是「更高效的电池」，
+  而是<strong>把光谱按用途劈开</strong>——PAR 透下去给藻，NIR 与 UV 导到电池带上发电。</p>
+
+  <h3>5.1　屋面构型</h3>
+  <div class="tbl-wrap"><table>
+    <caption>表 5-1　屋面节距与两条功能区</caption>
+    <thead><tr><th style="width:150px">功能区</th><th class="n">面积占比</th><th class="n">宽度</th>
+      <th class="n">PAR 透过率</th><th>构成</th></tr></thead>
+    <tbody>
+      <tr><td><strong>电池带区</strong></td><td class="n">38%</td><td class="n">380 mm</td><td class="n">56%</td>
+        <td class="dim">背接触双面晶硅 IBC/TOPCon（38% 覆盖率分光）；NIR 收集 92%、UV 收集 90%</td></tr>
+      <tr><td><strong>采光波导区</strong></td><td class="n">62%</td><td class="n">620 mm</td><td class="n">90%</td>
+        <td class="dim">8 mm 超白玻璃基板 + DBR 多层介质膜，NIR 反射率 ≥ 90%</td></tr>
+      <tr class="total"><td>节距</td><td class="n">1,000 mm</td><td class="n">—</td>
+        <td class="n">0.771</td><td class="dim">面积加权：0.38×0.56 + 0.62×0.90 = 0.771</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="note"><span class="t">计算过程</span>T_PAR = 0.38 × 0.56 + 0.62 × 0.90 = 0.7708 ≈ 0.771。这个数字直接锁定了藻池的年产量 584.7 t。超白玻璃 n = 1.52，全内反射临界角 θc = arcsin(1.0/1.52) = 41.14°；DBR 把 700–1100 nm 的近红外以 R ≥ 90% 反射并偏折入基板，超过临界角后全程 TIR 导向电池带。</div>
+
+  <h3>5.2　光谱与能量流</h3>
+  <p>按 AM1.5G 标准光谱拆分：PAR（400–700 nm）占 43.5%，NIR（700–1100 nm）占 38.5%，
+  UV（300–400 nm）与长波各占其余。直散分离用 Erbs 模型对 87,672 小时逐时处理，
+  得到腾冲全年<strong>直射 48.8%、散射 51.2%</strong>。直射入射角明确，波导 TIR 收集率 75%；
+  散射呈半球各向同性，落入接收锥的等效收集率 30%。</p>
+
+  <div class="tbl-wrap"><table>
+    <caption>表 5-2　全屋面年能量流（80,000 m²，年值）</caption>
+    <thead><tr><th style="width:250px">能量流分项</th><th class="n">占入射</th><th class="n">年能量</th><th>机理</th></tr></thead>
+    <tbody>
+      <tr><td>全屋面年太阳总入射</td><td class="n">100.0%</td><td class="n">130.80 GWh</td>
+        <td class="dim">1,634.6 kWh/m²·年 × 80,000 m²</td></tr>
+      <tr><td>① 38% 电池带区直接吸收</td><td class="n">22.8%</td><td class="n">29.80 GWh</td>
+        <td class="dim">NIR 92% + UV 90%（PAR 透过不吸收）</td></tr>
+      <tr><td>② 62% 采光区直射 NIR 波导汇聚</td><td class="n">8.7%</td><td class="n">11.40 GWh</td>
+        <td class="dim">× 直射份额 48.8% × 收集率 75%</td></tr>
+      <tr><td>③ 62% 采光区散射 NIR 波导汇聚</td><td class="n">3.7%</td><td class="n">4.80 GWh</td>
+        <td class="dim">× 散射份额 51.2% × 收集率 30%</td></tr>
+      <tr class="total"><td>入射电池带有效总能量</td><td class="n">35.2%</td><td class="n">46.00 GWh</td>
+        <td class="dim">① + ② + ③</td></tr>
+      <tr><td>透入藻池 PAR</td><td class="n">33.5%</td><td class="n">43.80 GWh</td>
+        <td class="dim">130.80 × 43.5% × 0.771</td></tr>
+      <tr><td>长波与未收集光学损失</td><td class="n">31.3%</td><td class="n">41.00 GWh</td>
+        <td class="dim">硅禁带外长波 + 散射逸出</td></tr>
+      <tr class="total"><td>被动波导基础发电</td><td class="n">5.63%</td><td class="n">7.360 GWh</td>
+        <td class="dim">46.00 × 20.0% × PR 0.80</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="note"><span class="t">计算过程</span>三路相加 29.80 + 11.40 + 4.80 = 46.00 GWh；46.00 + 43.80 + 41.00 = 130.80 GWh，闭合。被动发电 = 46.00 × 0.200 × 0.80 = 7.360 GWh。组件效率取 20.0%，相对当前量产 IBC/TOPCon 的 23%–25% 主动让出 3–5 个点，专门留给近红外光谱失配、波导边缘耦合与温升裕度——这是刻意的保守，不是能力上限。</div>
+
+  <h3>5.3　主动削峰层</h3>
+  <p>腾冲「日均光照充裕」与「正午光照过量」并存。后者会让藻池表层细胞因光子通量超出 PSII 周转速率
+  而发生非光化学猝灭与光氧化损伤。主动层在 62% 采光区正下方 120 mm 布置<strong>微抛物面定向聚光百叶</strong>，
+  焦点线对准两侧相邻电池带的背面：当水下量子传感器测得 PPFD 超过 570 μmol/m²/s 时，
+  百叶只把<strong>超额部分</strong>反射去发电，阈值以下的 PAR 全部留给藻。</p>
+
+  <div class="tbl-wrap"><table>
+    <caption>表 5-3　主动层削峰上限扫描（逐时超额积分，冬季补温基准）</caption>
+    <thead><tr><th>PPFD 上限</th><th class="n">削减超额 PAR</th><th class="n">主动增发</th>
+      <th class="n">全厂总发电</th><th class="n">净外送</th><th class="n">微藻年产</th></tr></thead>
+    <tbody>
+      <tr><td>400 μmol/m²/s</td><td class="n">25.6 GWh</td><td class="n">2,474 MWh</td><td class="n">9,834 MWh</td>
+        <td class="n">9,374 MWh</td><td class="n">556.6 t</td></tr>
+      <tr><td>500</td><td class="n">19.9 GWh</td><td class="n">1,926 MWh</td><td class="n">9,286 MWh</td>
+        <td class="n">8,826 MWh</td><td class="n">579.5 t</td></tr>
+      <tr style="background:#FFF7ED"><td><strong>570（推荐工作点）</strong></td><td class="n">16.4 GWh</td>
+        <td class="n"><strong>1,586 MWh</strong></td><td class="n"><strong>8,946 MWh</strong></td>
+        <td class="n"><strong>8,486 MWh</strong></td><td class="n"><strong>584.7 t</strong></td></tr>
+      <tr><td>700（工程宽容上限）</td><td class="n">10.9 GWh</td><td class="n">1,053 MWh</td><td class="n">8,413 MWh</td>
+        <td class="n">7,953 MWh</td><td class="n">589.0 t</td></tr>
+      <tr><td>900</td><td class="n">4.8 GWh</td><td class="n">464 MWh</td><td class="n">7,824 MWh</td>
+        <td class="n">7,364 MWh</td><td class="n">586.6 t</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="note"><span class="t">计算过程</span>全链光学回收效率 η_rec = R_blade 0.92 × η_intercept 0.88 × T_glass 0.85 × η_geom 0.80 = 0.55；× 削减的超额 PAR 16.4 GWh = 主动增发 1,586 MWh。570 μmol/m²/s 这个工作点是扫描出来的最优点：再往下压则藻产量下降（400 时仅 556.6 t，少 4.8%），再往上调则增发锐减。</div>
+
+  <h3>5.4　光伏合计账</h3>
+  <div class="metrics">
+    <div class="metric"><div class="k">装机</div><div class="v">6.08<span class="u">MWp</span></div>
+      <div class="s">30,400 m² × 200 W/m²</div></div>
+    <div class="metric"><div class="k">毛发电</div><div class="v">8.95<span class="u">GWh</span></div>
+      <div class="s">被动 7.36 + 主动 1.59</div></div>
+    <div class="metric"><div class="k">厂用电</div><div class="v">0.46<span class="u">GWh</span></div>
+      <div class="s">泵、搅拌、传感、清洗机器人</div></div>
+    <div class="metric"><div class="k">净外送</div><div class="v">8.49<span class="u">GWh</span></div>
+      <div class="s">8,486 MWh</div></div>
+    <div class="metric"><div class="k">综合太阳能利用率</div><div class="v">40.3<span class="u">%</span></div>
+      <div class="s">电 6.8% + 藻体 PAR 33.5%</div></div>
+  </div>
+  <div class="note"><span class="t">计算过程</span>8,946 − 460 = 8,486 MWh ≈ 8.49 GWh。六项自耗电：藻池泵 180.0 + 搅拌 120.0 + 采收 75.5 +干燥 40.0 + 环控 33.7 + 传感与清洗 10.4 = 459.6 MWh。</div>
+</section>
+
+<section id="s6">
+  <div class="sec-head"><div class="sec-num">06</div><h2>三级储能</h2>
+    <div class="tag">STORAGE · 105.04 MWh / 1,954 m³</div></div>
+
+  <div class="tbl-wrap"><table>
+    <caption>表 6-1　三级储能配置细则</caption>
+    <thead><tr><th>层级</th><th>技术</th><th class="n">储能量</th><th class="n">体积</th>
+      <th class="n">密度</th><th class="n">等效功率</th><th>体积构成</th></tr></thead>
+    <tbody>
+      <tr><td><strong>一级</strong></td><td>飞轮</td><td class="n">40 kWh</td><td class="n">4 m³</td>
+        <td class="n">10.0</td><td class="n">1.2–7.2 MW</td>
+        <td class="dim">80 cm 碳纤维转子 + 配套</td></tr>
+      <tr><td><strong>二级</strong></td><td>全钒液流</td><td class="n">5.00 MWh</td><td class="n">350 m³</td>
+        <td class="n">14.3</td><td class="n">1.25–7.5 MW</td>
+        <td class="dim">电解液罐 250 + 配套冗余 100</td></tr>
+      <tr><td><strong>三级</strong></td><td>铁—空气</td><td class="n">100.00 MWh</td><td class="n">1,600 m³</td>
+        <td class="n">62.5</td><td class="n">1.39–4.17 MW</td>
+        <td class="dim">铁/空气电极 1,300 + 配套 300（含除 CO₂）</td></tr>
+      <tr class="total"><td colspan="2">合计</td><td class="n">105.04 MWh</td><td class="n">1,954 m³</td>
+        <td class="n">53.8</td><td class="n">—</td><td class="dim">边长 12.5 m 的立方体</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="note"><span class="t">计算过程</span>40 + 5,000 + 100,000 = 105,040 kWh = 105.04 MWh；4 + 350 + 1,600 = 1,954 m³；105,040 ÷ 1,954 = 53.8 kWh/m³。按 4 m 净高折算占地约 489 m²。按本世界日均负荷 1,826 kW 校核：飞轮 79 秒、液流 2.74 小时、铁—空气 2.28 天。</div>
+
+  <div class="cols">
+    <div class="card tint-es"><h4>为什么不是一块大电池</h4>
+      <p>为几秒钟的尖峰配一整座电池仓，是浪费功率；为几天的阴雨长期闲置功率型电池，是浪费能量。
+      把三种技术放在各自的高效区间，才有 53.8 kWh/m³ 的综合密度。</p></div>
+    <div class="card tint-es"><h4>扩容规则</h4>
+      <p>每增加 1 天续航：铁—空气需 877 m³；每增加 1 小时：液流需 160 m³，铁—空气只需 36.5 m³。
+      小时级缺口用液流补（响应快），天级缺口用铁—空气补（密度高）——反过来配都会让体积或功率成本失控。</p></div>
+    <div class="card tint-es"><h4>口径边界</h4>
+      <p>1,954 m³ 是设备包络，不含通道、消防间距、检修与备件；按 1.2 倍工程系数，实际建筑体积约 2,345 m³。
+      105.04 MWh 是直流侧标称，按 90% 可用容量约 94.5 MWh。</p></div>
+  </div>
+</section>
+
+<section id="s7">
+  <div class="sec-head"><div class="sec-num">07</div><h2>生物质能与总体账</h2>
+    <div class="tag">BIOMASS · BALANCE</div></div>
+
+  <h3>7.1　生物质</h3>
+  <p>场址周边农林剩余物可得量约 <strong>650 t/年（干基）</strong>，折合一次能 2.70 GWh。
+  采用<strong>秸秆气化发电 + 余热梯级回收</strong>：气化燃气驱动 64 kWe 机组，产电 0.51 GWh；
+  气化余热以高温烟气形式供给窑炉，1.25 GWh。灰渣返田，不外排。</p>
+  <div class="tbl-wrap"><table>
+    <caption>表 7-1　生物质能量流</caption>
+    <thead><tr><th>项目</th><th class="n">能量</th><th>去向</th></tr></thead>
+    <tbody>
+      <tr><td>一次能投入</td><td class="n">2.70 GWh</td><td class="dim">650 t 干基 × 4,150 kWh/t</td></tr>
+      <tr><td>发电</td><td class="n">0.51 GWh</td><td class="dim">64 kWe 机组，气化效率 18.9%</td></tr>
+      <tr><td>高温热</td><td class="n">1.25 GWh</td><td class="dim">窑炉 0.55 + 藻乾燥 0.15 + 其他工业 0.55</td></tr>
+      <tr><td>转换损失</td><td class="n">0.94 GWh</td><td class="dim">气化与燃烧不可逆损失</td></tr>
+      <tr class="total"><td>综合利用率</td><td class="n">65.2%</td><td class="dim">(0.51 + 1.25) ÷ 2.70</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>7.2　全模块体积账</h3>
+  <div class="tbl-wrap"><table>
+    <caption>表 7-2　能源模块占用体积</caption>
+    <thead><tr><th>模块</th><th class="n">体积 m³</th><th class="n">占比</th><th>说明</th></tr></thead>
+    <tbody>
+      <tr><td>地热发电</td><td class="n">62,247</td><td class="n">6.2247%</td><td class="dim">井筒 61,123 + ORC 1,124</td></tr>
+      <tr><td>热电联产</td><td class="n">1,030</td><td class="n">0.1030%</td><td class="dim">储热罐与热能输送</td></tr>
+      <tr><td>传输</td><td class="n">524</td><td class="n">0.0524%</td><td class="dim">管廊与变电站</td></tr>
+      <tr><td>废热处理</td><td class="n">1,047</td><td class="n">0.1047%</td><td class="dim">干冷塔塔体</td></tr>
+      <tr><td>控制与辅助</td><td class="n">308</td><td class="n">0.0308%</td><td class="dim">控制室 200 + 废热包装 108</td></tr>
+      <tr class="total"><td>地热全系统</td><td class="n">65,156</td><td class="n">6.5156%</td><td class="dim">不含百年备件</td></tr>
+      <tr><td>光伏屋面</td><td class="n">0</td><td class="n">—</td><td class="dim">与微藻工厂屋面共构，不单独占体积</td></tr>
+      <tr><td>三级储能</td><td class="n">1,954</td><td class="n">0.1954%</td><td class="dim">包络体积</td></tr>
+      <tr class="total"><td>能源模块合计</td><td class="n">67,110</td><td class="n">6.7110%</td><td class="dim">＋百年备件 403~577 m³</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>7.3　能量平衡校核</h3>
+  <p>取热 10.574 MWth ＝ 毛发电 1.049 ＋ 排热 9.525，闭合；年量 84.6 ＝ 8.40 ＋ 76.2 GWh，闭合。
+  三联供出路是唯一需要解释的一项：76.2 GWh 里只有 4.20 GWh 被世界消费，其余 71.99 GWh 进干冷塔。</p>
+
+  <div class="note"><span class="t">装机与实发的区别</span>
+  装机固定 1.05 MWe；井口可供能力第 1 年 1.449 MWe、第 100 年 1.049 MWe。实发受装机限制，
+  第 1 年即 8.00 GWh，第 100 年仍 8.00 GWh，<strong>衰降为零</strong>——多出来的 0.40 MWe 不取，热留在岩体里。
+  这是这套方案与常规地热电站最不同的一点：<strong>岩体是蓄热体，不是燃料</strong>。</div>
+</section>
+
+
+
+<section id="src">
+  <div class="sec-head"><h2>参考来源</h2>
+    <div class="tag">SOURCES &amp; FURTHER READING</div></div>
+  <p class="quiet">本页各模块参数与公式的出处。</p>
+  <ol class="srclist"><li><span class="n">01</span><span class="b"><b>干热岩钻井的温度上限：MWD/井下电子额定 175 ℃，全金属马达现场试验 300 ℃（IDDP-2, 4,659 m）</b><span class="o">SPE-189677-MS, IADC/SPE Drilling Conference 2018</span><a href="https://doi.org/10.2118/189677-ms" target="_blank" rel="noopener">https://doi.org/10.2118/189677-ms</a></span></li>
+<li><span class="n">02</span><span class="b"><b>高温钻井与 MWD 的耐温目标（195 ℃ 级项目）</b><span class="o">NETL/DOE 报告, 2002</span><a href="https://doi.org/10.2172/828406" target="_blank" rel="noopener">https://doi.org/10.2172/828406</a></span></li>
+<li><span class="n">03</span><span class="b"><b>闭式回路地热的技术原理与自循环验证</b><span class="o">Eavor Technologies</span><a href="https://eavor.com/technology/" target="_blank" rel="noopener">https://eavor.com/technology/</a></span></li>
+<li><span class="n">04</span><span class="b"><b>非共沸混合工质在 ORC 中的温度滑移增益</b><span class="o">Heberle F., Brüggemann D., Energies 2015</span><a href="https://doi.org/10.3390/en8032097" target="_blank" rel="noopener">https://doi.org/10.3390/en8032097</a></span></li>
+<li><span class="n">05</span><span class="b"><b>微通道沸腾换热机理与压降代价</b><span class="o">Kandlikar S.G., ASME J. Heat Transfer 2004</span><a href="https://doi.org/10.1115/icmm2003-1005" target="_blank" rel="noopener">https://doi.org/10.1115/icmm2003-1005</a></span></li>
+<li><span class="n">06</span><span class="b"><b>两相自然循环的流动不稳定性</b><span class="o">Science and Technology of Nuclear Installations, 2008</span><a href="https://doi.org/10.1155/2008/573192" target="_blank" rel="noopener">https://doi.org/10.1155/2008/573192</a></span></li>
+<li><span class="n">07</span><span class="b"><b>ORC 系统的技术经济综述（效率区间与冷端影响）</b><span class="o">Quoilin S. et al., Renewable and Sustainable Energy Reviews, 2013</span><a href="https://doi.org/10.1016/j.rser.2012.12.031" target="_blank" rel="noopener">https://doi.org/10.1016/j.rser.2012.12.031</a></span></li>
+<li><span class="n">08</span><span class="b"><b>间接空冷（Heller 式）改造的净出力损失实测 1.68%</b><span class="o">Archives of Thermodynamics, 2022</span><a href="https://doi.org/10.24425/ame.2022.144076" target="_blank" rel="noopener">https://doi.org/10.24425/ame.2022.144076</a></span></li>
+<li><span class="n">09</span><span class="b"><b>腾冲多年平均水平面总辐照（1,540–1,601 kWh/m²·a 实测区间）</b><span class="o">NASA POWER 气候态 API</span><a href="https://power.larc.nasa.gov/api/temporal/climatology/point?parameters=ALLSKY_SFC_SW_DWN&amp;community=RE&amp;longitude=98.49&amp;latitude=25.02&amp;format=JSON" target="_blank" rel="noopener">https://power.larc.nasa.gov/api/temporal/climatology/point?parameters=ALLSKY_SFC_SW_DWN&amp;community=RE&amp;longitude=98.49&amp;latitude=25.02&amp;format=JSON</a></span></li>
+<li><span class="n">10</span><span class="b"><b>直散分离 Erbs 模型与小时尺度适用性</b><span class="o">PVsyst 官方帮助文档</span><a href="https://www.pvsyst.com/help/physical-models-used/irradiation-models/diffuse-irradiance-model.html" target="_blank" rel="noopener">https://www.pvsyst.com/help/physical-models-used/irradiation-models/diffuse-irradiance-model.html</a></span></li>
+<li><span class="n">11</span><span class="b"><b>晶硅电池/组件效率现状（商用组件约 24%+，实验室组件 26.0%）</b><span class="o">Fraunhofer ISE, Photovoltaics Report</span><a href="https://www.ise.fraunhofer.de/content/dam/ise/de/documents/publications/studies/Photovoltaics-Report.pdf" target="_blank" rel="noopener">https://www.ise.fraunhofer.de/content/dam/ise/de/documents/publications/studies/Photovoltaics-Report.pdf</a></span></li></ol>
+</section>
+
+</div>
+</div>
+                                    </div></article></main><footer class="site-footer container"><p><span lang="en">Katsa34</span> · 未橙</p><div class="footer-links"><a href="index.html">返回项目</a><a href="未橙 · 项目资料目录.html">资料目录</a><a href="#top">回到顶部 ↑</a></div></footer><button id="theme-toggle" class="theme-toggle" type="button"
+    aria-label="切换到浅色模式" title="切换到浅色模式" hidden>
+    <svg class="theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" aria-hidden="true" focusable="false">
+      <circle cx="12" cy="12" r="4"></circle>
+      <path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+    </svg>
+    <svg class="theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+      <path d="M20.5 14A8.5 8.5 0 0 1 10 3.5 8.5 8.5 0 1 0 20.5 14Z"></path>
+    </svg>
+    <span class="theme-toggle-label">浅色</span>
+  </button><script>
+    (() => {
+      const root = document.documentElement;
+      const toggle = document.getElementById("theme-toggle");
+      const label = toggle.querySelector(".theme-toggle-label");
+      let isSwitching = false;
+
+      function applyTheme(theme) {
+        root.dataset.theme = theme;
+        const isLight = theme === "light";
+        const action = isLight ? "切换到深色模式" : "切换到浅色模式";
+        label.textContent = isLight ? "深色" : "浅色";
+        toggle.setAttribute("aria-label", action);
+        toggle.title = action;
+        document.querySelector('meta[name="theme-color"]').content =
+          getComputedStyle(root).getPropertyValue("--page").trim();
+        document.querySelector('meta[name="color-scheme"]').content = theme;
+      }
+
+      applyTheme(root.dataset.theme === "light" ? "light" : "dark");
+      toggle.hidden = false;
+      toggle.addEventListener("click", async () => {
+        if (isSwitching) return;
+        const theme = root.dataset.theme === "light" ? "dark" : "light";
+        const update = () => {
+          applyTheme(theme);
+          try { localStorage.setItem("katsa34-theme", theme); } catch {}
+        };
+
+        if (!document.startViewTransition || matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          update();
+          return;
+        }
+
+        const rect = toggle.getBoundingClientRect();
+        const x = rect.left + rect.width / 2;
+        const y = rect.top + rect.height / 2;
+        const radius = Math.ceil(Math.hypot(
+          Math.max(x, innerWidth - x), Math.max(y, innerHeight - y)
+        )) + 1;
+        root.style.setProperty("--theme-origin-x", `${x}px`);
+        root.style.setProperty("--theme-origin-y", `${y}px`);
+        root.style.setProperty("--theme-radius", `${radius}px`);
+
+        isSwitching = true;
+        try {
+          const transition = document.startViewTransition(update);
+          transition.ready.catch(() => {});
+          await transition.finished;
+        } catch {
+          update();
+        } finally {
+          isSwitching = false;
+        }
+      });
+    })();
+  </script></body></html>

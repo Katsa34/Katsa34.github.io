@@ -1,0 +1,290 @@
+{
+  "project": "百万立方未来世界",
+  "world": "未橙",
+  "url": "https://katsa34.github.io/projects/milcubes/",
+  "sourceSnapshotDate": "2026-10-29",
+  "projectPages": [
+    {
+      "id": 2550,
+      "title": "概述模块1——世界背景",
+      "file": "概述模块1——世界背景.html",
+      "source": "https://milcubes.zju.edu.cn/project/2550"
+    },
+    {
+      "id": 2551,
+      "title": "概述模块2——新的挑战",
+      "file": "概述模块2——新的挑战.html",
+      "source": "https://milcubes.zju.edu.cn/project/2551"
+    },
+    {
+      "id": 2552,
+      "title": "概述模块3——设计概览",
+      "file": "概述模块3——设计概览.html",
+      "source": "https://milcubes.zju.edu.cn/project/2552"
+    },
+    {
+      "id": 2553,
+      "title": "概述模块4——创新设计",
+      "file": "概述模块4——创新设计.html",
+      "source": "https://milcubes.zju.edu.cn/project/2553"
+    },
+    {
+      "id": 2554,
+      "title": "能源模块1——总览",
+      "file": "能源模块1——总览.html",
+      "source": "https://milcubes.zju.edu.cn/project/2554"
+    },
+    {
+      "id": 2555,
+      "title": "能源模块2——细节设计",
+      "file": "能源模块2——细节设计.html",
+      "source": "https://milcubes.zju.edu.cn/project/2555"
+    },
+    {
+      "id": 2556,
+      "title": "能源模块3——创新技术",
+      "file": "能源模块3——创新技术.html",
+      "source": "https://milcubes.zju.edu.cn/project/2556"
+    },
+    {
+      "id": 2557,
+      "title": "能源模块4——地热梯级利用（详细设计）",
+      "file": "能源模块4——地热梯级利用（详细设计）.html",
+      "source": "https://milcubes.zju.edu.cn/project/2557"
+    },
+    {
+      "id": 2558,
+      "title": "科技模块1——总览",
+      "file": "科技模块1——总览.html",
+      "source": "https://milcubes.zju.edu.cn/project/2558"
+    },
+    {
+      "id": 2559,
+      "title": "科技模块2——细节设计",
+      "file": "科技模块2——细节设计.html",
+      "source": "https://milcubes.zju.edu.cn/project/2559"
+    },
+    {
+      "id": 2560,
+      "title": "科技模块3——创新设计",
+      "file": "科技模块3——创新设计.html",
+      "source": "https://milcubes.zju.edu.cn/project/2560"
+    },
+    {
+      "id": "group-128",
+      "title": "直到大地变橙一只小组",
+      "file": "直到大地变橙一只小组.html",
+      "source": "https://milcubes.zju.edu.cn/group/128"
+    }
+  ],
+  "attachmentReaders": [
+    {
+      "file": "未橙科技模块_细节设计_v1.0_20261024.docx",
+      "reader": "未橙 · 科技模块细节设计.html",
+      "paragraphs": 394,
+      "tables": 4,
+      "allTextPreserved": true,
+      "bytes": 40050,
+      "sha256": "aafb9a50f6bdbf09c36663f2821e359d8e6eda984833c5fa76417f911fa73df0",
+      "previousReader": "tech-details-attachment.html"
+    },
+    {
+      "file": "未橙科技模块_创新设计_v2.0_20261024.docx",
+      "reader": "未橙 · 科技模块创新设计.html",
+      "paragraphs": 343,
+      "tables": 12,
+      "allTextPreserved": true,
+      "bytes": 31635,
+      "sha256": "2da67c6b66e88ffdd27c1b3c45816e69e168e1dc7879d1841211dd4c70e363d0",
+      "previousReader": "tech-innovation-attachment.html"
+    }
+  ],
+  "attachments": [
+    {
+      "url": "https://zjucube.oss-cn-hangzhou.aliyuncs.com/uploads/2026/10/24/231511711066KR6iPI.docx",
+      "path": "attachments/未橙科技模块_细节设计_v1.0_20261024.docx",
+      "bytes": 70546,
+      "sha256": "f1e4123b68ec0021d7cd54ac9097445235c63e894afa45506460cacd37a71952"
+    },
+    {
+      "url": "https://zjucube.oss-cn-hangzhou.aliyuncs.com/uploads/2026/10/24/2315135953gWI6QnAz.docx",
+      "path": "attachments/未橙科技模块_创新设计_v2.0_20261024.docx",
+      "bytes": 70898,
+      "sha256": "69e8558e45cf488651292250d971fbddf4155ec1356b46e1ddda4607a98b646e"
+    }
+  ],
+  "removedEmptyPages": 39,
+  "treeNodes": 376,
+  "files": [
+    {
+      "path": "assets/1a06a3fbdf14-2328321714c4O3WFgX.jpg",
+      "bytes": 2132,
+      "sha256": "efd1899cd44115b4de68c1d75ec1f9ac954c7dcf56686a4e4df5b4dfe5c7b5a9"
+    },
+    {
+      "path": "assets/271100bccb00-2318110733Z65lVFth.png",
+      "bytes": 109902,
+      "sha256": "71230b64db17b45d3eb09686483da5043d86e549fc42158c9134879eb9ce43e6"
+    },
+    {
+      "path": "assets/2bd89583d087-1313155014BTuYq9NR.jpg",
+      "bytes": 65405,
+      "sha256": "af4a892d344037a06b14c78ff0e06bf0a6a3ad7740353f4b7919fdbf38db57e9"
+    },
+    {
+      "path": "assets/2c2b9fd5f57d-1432452928VSDVCEJB.jpg",
+      "bytes": 13322,
+      "sha256": "99e6e08ac2b5041f250c01e37704c45d01f4e91ca0d20288a76cfb1fb2799b69"
+    },
+    {
+      "path": "assets/3421fc46e957-2306172968JDfEXHrh.png",
+      "bytes": 109902,
+      "sha256": "71230b64db17b45d3eb09686483da5043d86e549fc42158c9134879eb9ce43e6"
+    },
+    {
+      "path": "assets/4f8e1bf5b944-2055102773GJsPuKKK.png",
+      "bytes": 148722,
+      "sha256": "9f19d3517dbd24a8a39a1262f7a5d7e5003bdd6095f76027590668547d88b6fc"
+    },
+    {
+      "path": "assets/5a2334491352-21421722489nYTol7S.png",
+      "bytes": 148722,
+      "sha256": "9f19d3517dbd24a8a39a1262f7a5d7e5003bdd6095f76027590668547d88b6fc"
+    },
+    {
+      "path": "assets/642ec42e54dc-2307528620rcP7hruF.png",
+      "bytes": 109902,
+      "sha256": "71230b64db17b45d3eb09686483da5043d86e549fc42158c9134879eb9ce43e6"
+    },
+    {
+      "path": "assets/7320e4f15bdd-23384233897s04OZDq.jpg",
+      "bytes": 11820,
+      "sha256": "50b0361022688524d4976a7d7be0dc6eb8666ce5bbc988840849c506d3c88f32"
+    },
+    {
+      "path": "assets/9a22eec15052-23045904282AGsoIJ0.jpeg",
+      "bytes": 13483,
+      "sha256": "f699ff9182015d6555c9abe3ea26dc6aaf61e2755ae54e8efc2fb853eee45dd5"
+    },
+    {
+      "path": "assets/9df4250af033-21424036022BgHAPw9.png",
+      "bytes": 148722,
+      "sha256": "9f19d3517dbd24a8a39a1262f7a5d7e5003bdd6095f76027590668547d88b6fc"
+    },
+    {
+      "path": "assets/bcb0e7a4def0-2249192136kZfEgXjL.jpg",
+      "bytes": 2879,
+      "sha256": "8b9c362b6d31f85978757caffeb13720bcf93239e3d2ad744c97e55f6ab0c19b"
+    },
+    {
+      "path": "assets/c2bcabd5fabd-2205219792Pt72n6vt.jpg",
+      "bytes": 4445,
+      "sha256": "b3050403193859aef708f2f036f962cf23fe771ab3ee372f5be32cab45f9a67f"
+    },
+    {
+      "path": "assets/ffd0904a863e-2141443742gFhyV7jq.png",
+      "bytes": 148722,
+      "sha256": "9f19d3517dbd24a8a39a1262f7a5d7e5003bdd6095f76027590668547d88b6fc"
+    },
+    {
+      "path": "attachments/未橙科技模块_创新设计_v2.0_20261024.docx",
+      "bytes": 70898,
+      "sha256": "69e8558e45cf488651292250d971fbddf4155ec1356b46e1ddda4607a98b646e"
+    },
+    {
+      "path": "attachments/未橙科技模块_细节设计_v1.0_20261024.docx",
+      "bytes": 70546,
+      "sha256": "f1e4123b68ec0021d7cd54ac9097445235c63e894afa45506460cacd37a71952"
+    },
+    {
+      "path": "index.html",
+      "bytes": 4618552,
+      "sha256": "8894d4e36b4e2f2d6c332cca7d12498d7ad2c0f29464a5450e93c3940487c718"
+    },
+    {
+      "path": "README.md",
+      "bytes": 731,
+      "sha256": "5d70e182a175fc6bb8ee9f35d3e54e1b2d9a2514edcd13e32f2acf3b0b2d87ac"
+    },
+    {
+      "path": "site-theme.css",
+      "bytes": 16991,
+      "sha256": "a88e5dcdbd4ee0789fb8d54cc04f99b2a6297f61106abecadf95233d633056ff"
+    },
+    {
+      "path": "未橙 · 科技模块创新设计.html",
+      "bytes": 31635,
+      "sha256": "2da67c6b66e88ffdd27c1b3c45816e69e168e1dc7879d1841211dd4c70e363d0"
+    },
+    {
+      "path": "未橙 · 科技模块细节设计.html",
+      "bytes": 40050,
+      "sha256": "aafb9a50f6bdbf09c36663f2821e359d8e6eda984833c5fa76417f911fa73df0"
+    },
+    {
+      "path": "未橙 · 项目资料目录.html",
+      "bytes": 7263,
+      "sha256": "72ed206b993e77f73e5b9e7beba56b9ebc86be62441170c5ec6e73b01b5c5443"
+    },
+    {
+      "path": "概述模块1——世界背景.html",
+      "bytes": 39281,
+      "sha256": "f3043d85f0d52411f9e82a1e8c83657949c29a5336f187aca958d19ecef6db93"
+    },
+    {
+      "path": "概述模块2——新的挑战.html",
+      "bytes": 5302,
+      "sha256": "da7b1277abb0bd9ef6ee547ad1343da92a4ef31f2bfb50eff51917d800f3ba44"
+    },
+    {
+      "path": "概述模块3——设计概览.html",
+      "bytes": 13614,
+      "sha256": "c75a3ec2dad7fb2b39e5a77f7b7baf13055f07e267989cf4a48075b574ead0b8"
+    },
+    {
+      "path": "概述模块4——创新设计.html",
+      "bytes": 6954,
+      "sha256": "aa0529a3ddd936e8809e91238bce516a39be329d042f72190777693900fa13f1"
+    },
+    {
+      "path": "直到大地变橙一只小组.html",
+      "bytes": 28943,
+      "sha256": "9bb97f26eb6cfc0cfc1233942b0e03b9984f84f974c95fa2def1c6697034f756"
+    },
+    {
+      "path": "科技模块1——总览.html",
+      "bytes": 1319366,
+      "sha256": "b5e26c2738e7f5d3dca0dfdde127c5ad2a79c3bce6c5f6f539cb4666b1e62a0b"
+    },
+    {
+      "path": "科技模块2——细节设计.html",
+      "bytes": 163456,
+      "sha256": "0f2ce7b58839791775797e65ec920fb923ccb86355ef5f572821e63538f5c170"
+    },
+    {
+      "path": "科技模块3——创新设计.html",
+      "bytes": 129177,
+      "sha256": "22fc92dd266a10b2a6ef53ebc81d3acab073c8fba32300ae4fb52b249a1e7e2c"
+    },
+    {
+      "path": "能源模块1——总览.html",
+      "bytes": 54494,
+      "sha256": "647cf719e41154c7526d66382b16ee8dfb7639e4f680ef89f1333238b53c35de"
+    },
+    {
+      "path": "能源模块2——细节设计.html",
+      "bytes": 48468,
+      "sha256": "ca2e8d9bc04fb81f83308060519736a1fd0a1405c62309715a51c86a531bc30d"
+    },
+    {
+      "path": "能源模块3——创新技术.html",
+      "bytes": 94254,
+      "sha256": "c26175fde4e7c30f408522305ddd3d75bada451307d1ecef931121eb907c07be"
+    },
+    {
+      "path": "能源模块4——地热梯级利用（详细设计）.html",
+      "bytes": 5304,
+      "sha256": "4bbac6ea6869a8a2e5f3cd4573e99f8a498fecfd9d416ea6d328980adb2b854a"
+    }
+  ]
+}

@@ -206,6 +206,7 @@
       border-radius: var(--radius);
       background: var(--surface);
     }
+    .project-card + .project-card { margin-block-start: 1.5rem; }
     .project-type { color: var(--muted); font-size: 0.75rem; letter-spacing: 0.1em; }
     .project-card h3 { margin-block: 0.875rem; font-size: clamp(1.375rem, 3vw, 2rem); letter-spacing: -0.01em; overflow-wrap: anywhere; }
     .project-description { max-width: 38rem; color: var(--muted); }
@@ -339,6 +340,18 @@
       </div>
 
       <!-- 新增项目时复用 article；请确认链接可访问，并填写实际内容。 -->
+      <article class="project-card" aria-labelledby="milcubes-project">
+        <div>
+          <p class="project-type meta" lang="en">FUTURE WORLD / MILCUBES</p>
+          <h3 id="milcubes-project">百万立方未来世界</h3>
+          <p class="project-description">未橙：一百万立方米，两千个人，一百年的独立生活。探索聚落、能源循环与生活科技。</p>
+          <ul class="project-tags" aria-label="项目主题">
+            <li>世界设定</li><li>能源循环</li><li>生活科技</li>
+          </ul>
+        </div>
+        <a class="button button-primary" href="/projects/milcubes/" aria-label="浏览百万立方未来世界项目">走进未橙<span aria-hidden="true">↗</span></a>
+      </article>
+
       <article class="project-card" aria-labelledby="homepage-project">
         <div>
           <p class="project-type meta" lang="en">PERSONAL WEBSITE</p>
